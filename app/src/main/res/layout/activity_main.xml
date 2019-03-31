@@ -53,7 +53,7 @@
             android:textSize="10dp" />
 
         <Button
-            android:id="@+id/calendar"
+            android:id="@+id/btnCalendar"
             android:layout_width="71dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -66,7 +66,7 @@
             android:textSize="10dp" />
 
         <Button
-            android:id="@+id/history"
+            android:id="@+id/btnHistory"
             android:layout_width="71dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -81,8 +81,5 @@
 
     </LinearLayout>
 
-
-    />
-
-
 </RelativeLayout>
+

@@ -5,4 +5,8 @@
     <string name="event_start_time">Start time</string>
     <string name="event_end_time">End time</string>
     <string name="location">Location</string>
+    <string name="plan_name">Name</string>
+    <string name="plan_description">Description</string>
+    <string name="plan_date">Date</string>
+    <string name="plan_save">Save</string>
 </resources>

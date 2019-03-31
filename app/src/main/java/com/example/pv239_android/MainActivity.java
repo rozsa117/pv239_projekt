@@ -5,17 +5,14 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
-
-import com.example.pv239_android.model.Details;
 import com.example.pv239_android.model.Event;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -23,6 +20,7 @@ import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "MainActivity";
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -35,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
                 .schemaVersion(1)
                 .deleteRealmIfMigrationNeeded()
                 .build();
-
+        Log.d(TAG, "onCreate: Started");
         Realm mRealm = Realm.getInstance(configuration);
 
         ArrayList<Event> eventsList = new ArrayList<>();
@@ -55,8 +53,27 @@ public class MainActivity extends AppCompatActivity {
         createNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d(TAG, "onClick: Crate new plan");
                 Intent i = new Intent(MainActivity.this, NewEventActivity.class);
                 startActivity(i);
+            }
+        });
+
+        Button calendarBtn = (Button) findViewById(R.id.btnCalendar);
+        calendarBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onCreate: Calendar");
+                startActivity(new Intent(MainActivity.this, Calendar.class));
+            }
+        });
+
+        Button historyBtn = (Button) findViewById(R.id.btnHistory);
+        historyBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onCreate: History");
+                startActivity(new Intent(MainActivity.this, Calendar.class));
             }
         });
 
