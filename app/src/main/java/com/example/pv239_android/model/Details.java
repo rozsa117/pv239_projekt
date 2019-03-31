@@ -1,7 +1,9 @@
-package com.example.pv239_android;
+package com.example.pv239_android.model;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+
+import com.example.pv239_android.R;
 
 import java.time.LocalDate;
 
