@@ -40,7 +40,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/newTask"
+            android:id="@+id/newEvent"
             android:layout_width="71dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

@@ -47,7 +47,8 @@ public class EventAdapter extends ArrayAdapter<Event> {
         name.setText(currentEvent.getmName());
 
         TextView time = (TextView) listItem.findViewById(R.id.eventTime);
-        time.setText(LocalDateTime.ofInstant(
+        //TODO uncomment as soon as save plan is implemented
+/*        time.setText(LocalDateTime.ofInstant(
                 currentEvent.getmStartTime().toInstant(), ZoneId.systemDefault()).format(formatter) +
                 " - " + LocalDateTime.ofInstant(
                 currentEvent.getmEndTime().toInstant(), ZoneId.systemDefault()).format(formatter));
@@ -74,7 +75,7 @@ public class EventAdapter extends ArrayAdapter<Event> {
                 mContext.startActivity(i);
                 return false;
             }
-        });
+        });*/
 
         return listItem;
     }

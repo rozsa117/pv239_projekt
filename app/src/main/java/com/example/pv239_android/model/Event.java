@@ -1,23 +1,21 @@
 package com.example.pv239_android.model;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
-import io.realm.annotations.Required;
 
 public class Event extends RealmObject {
 
     @PrimaryKey
-    private int mEvent;
+    private int mId;
     private String mName;
     private String mDescription;
     private String mPosition;
     private String mNotes;
     private Date mStartTime;
     private Date mEndTime;
-    private boolean mFinished;
+    private boolean mFinished = false;
 
     public Event(String mName, String mDescription, String mPosition, String mNotes, Date mStartTime, Date mEndTime, boolean mFinished) {
         this.mName = mName;
@@ -33,12 +31,12 @@ public class Event extends RealmObject {
 
     }
 
-    public int getmEvent() {
-        return mEvent;
+    public int getmId() {
+        return mId;
     }
 
-    public void setmEvent(int mEvent) {
-        this.mEvent = mEvent;
+    public void setmId(int mId) {
+        this.mId = mId;
     }
 
     public String getmName() {
@@ -72,7 +70,6 @@ public class Event extends RealmObject {
     public void setmNotes(String mNotes) {
         this.mNotes = mNotes;
     }
-
 
     public Date getmStartTime() {
         return mStartTime;

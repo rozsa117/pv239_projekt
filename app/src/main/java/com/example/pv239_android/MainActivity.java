@@ -18,6 +18,7 @@ import java.util.Date;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -27,29 +28,27 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Realm.init(this);
-        RealmConfiguration configuration = new RealmConfiguration.Builder()
-                .name("test.db")
-                .schemaVersion(1)
-                .deleteRealmIfMigrationNeeded()
-                .build();
         Log.d(TAG, "onCreate: Started");
-        Realm mRealm = Realm.getInstance(configuration);
 
-        ArrayList<Event> eventsList = new ArrayList<>();
-        eventsList.add(new Event("Gym", "go to gym", "12Ssa", "take bottle of water", toDate("2018-09-24 09:30:00")
-        ,toDate("2018-09-24 10:30:00"), false));
-        eventsList.add(new Event("School", "go to gym", "12Ssa", "take bottle of water", toDate("2018-09-26 16:00:00")
-                , toDate("2018-09-29 17:00:00"), false));
+        //init Realm
+        Realm.init(getApplicationContext());
+        RealmConfiguration config =
+                new RealmConfiguration.Builder()
+                        .deleteRealmIfMigrationNeeded()
+                        .build();
+        Realm.setDefaultConfiguration(config);
+        Realm mRealm = Realm.getDefaultInstance();
 
+        //get all Events
+        RealmResults<Event> events = mRealm.where(Event.class).findAll();
         EventAdapter adapter = new EventAdapter(this,
-                eventsList);
+                events);
 
         ListView listView = (ListView) findViewById(R.id.event_list);
         listView.setAdapter(adapter);
 
-
-        Button createNew = (Button) findViewById(R.id.newTask);
+        // new Event button
+        Button createNew = (Button) findViewById(R.id.newEvent);
         createNew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Calendar button
         Button calendarBtn = (Button) findViewById(R.id.btnCalendar);
         calendarBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // History button
         Button historyBtn = (Button) findViewById(R.id.btnHistory);
         historyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,6 +80,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // TODO converts string to date, maybe should be placed somewhere else
+    // possible palce is a static class in order to access form anywhere
     public Date toDate(String dateString) {
         Date date = null;
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
