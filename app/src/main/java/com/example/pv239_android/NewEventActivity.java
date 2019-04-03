@@ -12,6 +12,10 @@ import android.widget.EditText;
 
 import com.example.pv239_android.model.Event;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
+
 import io.realm.Realm;
 
 public class NewEventActivity extends AppCompatActivity {
@@ -19,6 +23,7 @@ public class NewEventActivity extends AppCompatActivity {
     private static final String TAG = "NewEventActivity";
 
     Realm mRealm = Realm.getDefaultInstance();
+    Date incomingDate;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -26,6 +31,18 @@ public class NewEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_event);
         Log.d(TAG, "onCreate: Started");
+
+        LocalDateTime now =  LocalDateTime.now();
+        final Intent incomingIntent = getIntent();
+        //passed by the CalendarActivity, format year-month-day
+        int[] date = incomingIntent.getIntArrayExtra("date");
+        if (date != null){
+            incomingDate = new Date (date[0], date[1], date[2], now.getHour(), now.getMinute());
+        } else {
+            incomingDate = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
+        }
+
+        //TODO set the start and end time of an event to user in order to allow him to edit and see the value
 
         // Save button
         Button saveButton = (Button) findViewById(R.id.btnSavePlan);
@@ -41,9 +58,11 @@ public class NewEventActivity extends AppCompatActivity {
                         mEvent.setmId(getNextKey());
                         mEvent.setmName(((EditText) findViewById(R.id.newEventNameEdit)).getText().toString());
                         mEvent.setmDescription(((EditText) findViewById(R.id.newEventDescriptionEdit)).getText().toString());
+                        mEvent.setmStartTime(incomingDate);
+                        //set time an hour later
+                        incomingDate.setTime(incomingDate.getTime() + 3600);
+                        mEvent.setmEndTime(incomingDate);
                         //TODO finish implementation
-                        //mEvent.setmStartTime();
-                        //mEvent.setmEndTime();
                         //mEvent.setmPosition();
 
                         realm.insert(mEvent);

@@ -48,13 +48,13 @@ public class EventAdapter extends ArrayAdapter<Event> {
 
         TextView time = (TextView) listItem.findViewById(R.id.eventTime);
         //TODO uncomment as soon as save plan is implemented
-/*        time.setText(LocalDateTime.ofInstant(
+        time.setText(LocalDateTime.ofInstant(
                 currentEvent.getmStartTime().toInstant(), ZoneId.systemDefault()).format(formatter) +
                 " - " + LocalDateTime.ofInstant(
                 currentEvent.getmEndTime().toInstant(), ZoneId.systemDefault()).format(formatter));
-
+/*
         TextView mPosition = (TextView) listItem.findViewById(R.id.position);
-        mPosition.setText(currentEvent.getmPosition());
+        mPosition.setText(currentEvent.getmPosition());*/
 
         Switch isFinished = (Switch) listItem.findViewById(R.id.isFinished);
         isFinished.setChecked(currentEvent.ismFinished());
@@ -71,11 +71,11 @@ public class EventAdapter extends ArrayAdapter<Event> {
             @Override
             public boolean onLongClick(View v) {
                 Intent i = new Intent(mContext , Details.class);
-                i.putExtra("event_id", eventList.get(position).getmEvent());
+                i.putExtra("event_id", eventList.get(position).getmId());
                 mContext.startActivity(i);
                 return false;
             }
-        });*/
+        });
 
         return listItem;
     }

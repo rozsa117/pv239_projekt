@@ -39,6 +39,15 @@ public class MainActivity extends AppCompatActivity {
         Realm.setDefaultConfiguration(config);
         Realm mRealm = Realm.getDefaultInstance();
 
+        //***********************************************************//
+        //TODO DELETE THIS PART AS SOON AS YOU WANT DATA IN APLICATION
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.delete(Event.class);
+            }
+        });
+        //***********************************************************//
         //get all Events
         RealmResults<Event> events = mRealm.where(Event.class).findAll();
         EventAdapter adapter = new EventAdapter(this,
@@ -58,23 +67,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Calendar button
+        // CalendarActivity button
         Button calendarBtn = (Button) findViewById(R.id.btnCalendar);
         calendarBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onCreate: Calendar");
-                startActivity(new Intent(MainActivity.this, Calendar.class));
+                Log.d(TAG, "onCreate: CalendarActivity");
+                startActivity(new Intent(MainActivity.this, CalendarActivity.class));
             }
         });
 
-        // History button
+        // HistoryActivity button
         Button historyBtn = (Button) findViewById(R.id.btnHistory);
         historyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onCreate: History");
-                startActivity(new Intent(MainActivity.this, Calendar.class));
+                Log.d(TAG, "onCreate: HistoryActivity");
+                startActivity(new Intent(MainActivity.this, HistoryActivity.class));
             }
         });
 
