@@ -1,5 +1,7 @@
 package com.example.pv239_android;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -8,12 +10,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.example.pv239_android.model.Event;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.Date;
 
 import io.realm.Realm;
@@ -24,6 +28,9 @@ public class NewEventActivity extends AppCompatActivity {
 
     Realm mRealm = Realm.getDefaultInstance();
     Date incomingDate;
+    private TextView startTimeTextView, startDateTextView, endDateTextView, endTimeTextView;
+    private int mStartYear, mStartMonth, mStartDay, mStartHour, mStartMinute;
+    private int mEndYear, mEndMonth, mEndDay, mEndHour, mEndMinute;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -32,17 +39,39 @@ public class NewEventActivity extends AppCompatActivity {
         setContentView(R.layout.activity_new_event);
         Log.d(TAG, "onCreate: Started");
 
-        LocalDateTime now =  LocalDateTime.now();
+        //start time and date text view
+        startTimeTextView = findViewById(R.id.newEventStartTimeTextView);
+        startDateTextView = findViewById(R.id.newEventStartDateTextView);
+
+        //end time and date text view
+        endDateTextView = findViewById(R.id.newEventEndDateTextView);
+        endTimeTextView = findViewById(R.id.newEventEndTimeTextView);
+
         final Intent incomingIntent = getIntent();
         //passed by the CalendarActivity, format year-month-day
         int[] date = incomingIntent.getIntArrayExtra("date");
-        if (date != null){
-            incomingDate = new Date (date[0], date[1], date[2], now.getHour(), now.getMinute());
+
+        final Calendar c = Calendar.getInstance();
+        if (date != null) {
+            //for start date and time
+            saveAndPrintDate(date[0], date[1], date[2], true);
+            saveAndPrintTime(c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
+
+            //for start date and time
+            saveAndPrintDate(date[0], date[1], date[2], false);
+            saveAndPrintTime(c.get(Calendar.HOUR_OF_DAY ) + 1, c.get(Calendar.MINUTE), false);
         } else {
-            incomingDate = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
+            //for start date and time
+            saveAndPrintDate(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), true);
+            saveAndPrintTime(c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
+
+            //for start date and time
+            saveAndPrintDate(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), false);
+            saveAndPrintTime(c.get(Calendar.HOUR_OF_DAY) + 1, c.get(Calendar.MINUTE), false);
         }
 
-        //TODO set the start and end time of an event to user in order to allow him to edit and see the value
+        //setting listeners to each button and setting current date and time on a new event
+        handleDateAndTimeSelection();
 
         // Save button
         Button saveButton = (Button) findViewById(R.id.btnSavePlan);
@@ -58,9 +87,9 @@ public class NewEventActivity extends AppCompatActivity {
                         mEvent.setmId(getNextKey());
                         mEvent.setmName(((EditText) findViewById(R.id.newEventNameEdit)).getText().toString());
                         mEvent.setmDescription(((EditText) findViewById(R.id.newEventDescriptionEdit)).getText().toString());
+                        //TODO convert date and time to Date
                         mEvent.setmStartTime(incomingDate);
                         //set time an hour later
-                        incomingDate.setTime(incomingDate.getTime() + 3600);
                         mEvent.setmEndTime(incomingDate);
                         //TODO finish implementation
                         //mEvent.setmPosition();
@@ -92,4 +121,95 @@ public class NewEventActivity extends AppCompatActivity {
         }
     }
 
+    private void handleDateAndTimeSelection() {
+
+        //start time button
+        Button startDateButton = (Button) findViewById(R.id.newEventSelectStartDateButton);
+        startDateButton.setOnClickListener(makeListenerForDate(true));
+
+        //start time button
+        Button startTimeButton = (Button) findViewById(R.id.newEventSelectStartTimeButton);
+        startTimeButton.setOnClickListener(makeListenerForTime(true));
+
+        // end date button
+        Button endDateButton = (Button) findViewById(R.id.newEventSelectEndDateButton);
+        endDateButton.setOnClickListener(makeListenerForDate(false));
+
+        // end time button
+        Button endTimeButton = (Button) findViewById(R.id.newEventSelectEndTimeButton);
+        endTimeButton.setOnClickListener(makeListenerForTime(false));
+    }
+
+    private  View.OnClickListener makeListenerForTime(final boolean isStart) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Launch Time Picker Dialog
+                TimePickerDialog timePickerDialog = new TimePickerDialog(NewEventActivity.this,
+                        new TimePickerDialog.OnTimeSetListener() {
+
+                            @Override
+                            public void onTimeSet(TimePicker view, int hourOfDay,
+                                                  int minute) {
+                                saveAndPrintTime(hourOfDay, minute, isStart);
+                            }
+                        }, mStartHour, mStartMinute, true);
+                timePickerDialog.show();
+            }
+        };
+    }
+
+    private View.OnClickListener makeListenerForDate(final boolean isStart) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(NewEventActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+                                saveAndPrintDate(year, monthOfYear, dayOfMonth, isStart);
+                            }
+                        }, mStartYear, mStartMonth, mStartDay);
+                datePickerDialog.show();
+            }
+        };
+    }
+
+    private void setTimeAndDateIfNeeded(boolean isStart) {
+        final Calendar c = Calendar.getInstance();
+        saveAndPrintDate(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), isStart);
+        saveAndPrintTime(c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), isStart);
+    }
+
+    private void saveAndPrintTime(int hour, int minute, boolean isStart) {
+        if(isStart) {
+            startTimeTextView.setText(hour + ":" + minute);
+            mStartHour = hour;
+            mStartMinute = minute;
+        }
+        else {
+            endTimeTextView.setText(hour + ":" + minute);
+            mEndHour = hour;
+            mEndMinute = minute;
+
+        }
+    }
+
+    private void saveAndPrintDate(int year, int month, int day, boolean isStart) {
+        if (isStart) {
+            startDateTextView.setText(day + "-" + (month + 1) + "-" + year);
+            mStartYear = year;
+            mStartMonth = month;
+            mStartDay = day;
+        }
+        else {
+            endDateTextView.setText(day + "-" + (month + 1) + "-" + year);
+            mEndYear = year;
+            mEndMonth = month;
+            mEndDay = day;
+        }
+    }
 }

@@ -9,4 +9,8 @@
     <string name="plan_description">Description</string>
     <string name="plan_date">Date</string>
     <string name="plan_save">Save</string>
+    <string name="new_event_select_start_time">Start time</string>
+    <string name="new_event_select_start_date">Start date</string>
+    <string name="new_event_select_end_time">End time</string>
+    <string name="new_event_select_end_date">End date</string>
 </resources>

@@ -41,12 +41,12 @@ public class MainActivity extends AppCompatActivity {
 
         //***********************************************************//
         //TODO DELETE THIS PART AS SOON AS YOU WANT DATA IN APLICATION
-        mRealm.executeTransaction(new Realm.Transaction() {
+        /*mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 realm.delete(Event.class);
             }
-        });
+        });*/
         //***********************************************************//
         //get all Events
         RealmResults<Event> events = mRealm.where(Event.class).findAll();
