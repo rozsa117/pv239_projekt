@@ -27,7 +27,6 @@ public class NewEventActivity extends AppCompatActivity {
     private static final String TAG = "NewEventActivity";
 
     Realm mRealm = Realm.getDefaultInstance();
-    Date incomingDate;
     private TextView startTimeTextView, startDateTextView, endDateTextView, endTimeTextView;
     private int mStartYear, mStartMonth, mStartDay, mStartHour, mStartMinute;
     private int mEndYear, mEndMonth, mEndDay, mEndHour, mEndMinute;
@@ -50,6 +49,7 @@ public class NewEventActivity extends AppCompatActivity {
         final Intent incomingIntent = getIntent();
         //passed by the CalendarActivity, format year-month-day
         int[] date = incomingIntent.getIntArrayExtra("date");
+        final int incoming_id = incomingIntent.getIntExtra("event_id", -1);
 
         final Calendar c = Calendar.getInstance();
         if (date != null) {
@@ -84,17 +84,22 @@ public class NewEventActivity extends AppCompatActivity {
                     @Override
                     public void execute(Realm realm) {
                         Event mEvent = new Event();
-                        mEvent.setmId(getNextKey());
+                        if (incoming_id == -1) {
+                            mEvent.setmId(getNextKey());
+                        }
+                        else {
+                         mEvent.setmId(incoming_id);
+                        }
                         mEvent.setmName(((EditText) findViewById(R.id.newEventNameEdit)).getText().toString());
                         mEvent.setmDescription(((EditText) findViewById(R.id.newEventDescriptionEdit)).getText().toString());
                         //TODO convert date and time to Date
-                        mEvent.setmStartTime(incomingDate);
+                        mEvent.setmStartTime(getDate(mStartYear, mStartMonth, mStartDay, mStartHour, mStartMinute));
                         //set time an hour later
-                        mEvent.setmEndTime(incomingDate);
+                        mEvent.setmEndTime(getDate(mEndYear, mEndMonth, mEndDay, mEndHour, mEndMinute));
                         //TODO finish implementation
                         //mEvent.setmPosition();
 
-                        realm.insert(mEvent);
+                        realm.insertOrUpdate(mEvent);
                     }
                 });
 
@@ -185,31 +190,43 @@ public class NewEventActivity extends AppCompatActivity {
     }
 
     private void saveAndPrintTime(int hour, int minute, boolean isStart) {
+        String formatted = String.format( "%02d", hour)+ ":" + String.format( "%02d", hour);
         if(isStart) {
-            startTimeTextView.setText(hour + ":" + minute);
+            startTimeTextView.setText(formatted);
             mStartHour = hour;
             mStartMinute = minute;
         }
         else {
-            endTimeTextView.setText(hour + ":" + minute);
+            endTimeTextView.setText(formatted);
             mEndHour = hour;
             mEndMinute = minute;
-
         }
     }
 
     private void saveAndPrintDate(int year, int month, int day, boolean isStart) {
+        String formatted = String.format("%02d", day) + "-" + String.format("%02d", (month + 1)) + "-" + year;
         if (isStart) {
-            startDateTextView.setText(day + "-" + (month + 1) + "-" + year);
+            startDateTextView.setText(formatted);
             mStartYear = year;
             mStartMonth = month;
             mStartDay = day;
         }
         else {
-            endDateTextView.setText(day + "-" + (month + 1) + "-" + year);
+            endDateTextView.setText(formatted);
             mEndYear = year;
             mEndMonth = month;
             mEndDay = day;
         }
+    }
+
+    private static Date getDate(int year, int month, int day, int hour, int minute) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, month);
+        cal.set(Calendar.DAY_OF_MONTH, day);
+        cal.set(Calendar.HOUR_OF_DAY, hour);
+        cal.set(Calendar.MINUTE, minute);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
     }
 }
