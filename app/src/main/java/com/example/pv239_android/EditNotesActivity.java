@@ -4,16 +4,20 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 
 public class EditNotesActivity extends AppCompatActivity {
 
-    private String mNotes;
+    private EditText editText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_notes);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        editText = (EditText) findViewById(R.id.editNotes);
+        editText.setText(getIntent().getStringExtra("notes"));
     }
 
 

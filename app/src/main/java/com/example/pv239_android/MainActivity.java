@@ -3,8 +3,12 @@ package com.example.pv239_android;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +26,10 @@ import io.realm.RealmResults;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
+    private Toolbar toolbarToady;
+    private ViewPager viewPager;
+    private ViewPagerAdapter adapter;
+    private TabLayout tabLayout;
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -29,6 +37,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.d(TAG, "onCreate: Started");
+        toolbarToady = findViewById(R.id.toolbar_today);
+        setSupportActionBar(toolbarToady);
+
+        viewPager = (ViewPager) findViewById(R.id.pager);
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        //Add fragments
+        adapter.AddFragment(new TabFragment(), "Today");
+        adapter.AddFragment(new TabFragment(), "Upcoming");
+
+        viewPager.setAdapter(adapter);
+
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
 
         //init Realm
         Realm.init(getApplicationContext());
@@ -53,8 +74,6 @@ public class MainActivity extends AppCompatActivity {
         EventAdapter adapter = new EventAdapter(this,
                 events);
 
-        ListView listView = (ListView) findViewById(R.id.event_list);
-        listView.setAdapter(adapter);
 
         // new Event button
         Button createNew = (Button) findViewById(R.id.newEvent);

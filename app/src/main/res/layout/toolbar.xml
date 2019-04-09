@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="?attr/colorPrimary"
+    android:id="@+id/toolbar_today"
+    android:elevation="4dp"
+    tools:context=".MainActivity"
+    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+</android.support.v7.widget.Toolbar>

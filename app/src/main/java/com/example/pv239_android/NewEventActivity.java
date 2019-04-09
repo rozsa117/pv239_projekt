@@ -21,6 +21,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class NewEventActivity extends AppCompatActivity {
 
@@ -47,6 +48,9 @@ public class NewEventActivity extends AppCompatActivity {
         endDateTextView = findViewById(R.id.newEventEndDateTextView);
         endTimeTextView = findViewById(R.id.newEventEndTimeTextView);
 
+        //setting listeners to each button and setting current date and time on a new event
+        handleDateAndTimeSelection();
+
         final Intent incomingIntent = getIntent();
         //passed by the CalendarActivity, format year-month-day
         int[] date = incomingIntent.getIntArrayExtra("date");
@@ -70,8 +74,6 @@ public class NewEventActivity extends AppCompatActivity {
             saveAndPrintTime(c.get(Calendar.HOUR_OF_DAY) + 1, c.get(Calendar.MINUTE), false);
         }
 
-        //setting listeners to each button and setting current date and time on a new event
-        handleDateAndTimeSelection();
 
         // Save button
         Button saveButton = (Button) findViewById(R.id.btnSavePlan);
@@ -97,7 +99,7 @@ public class NewEventActivity extends AppCompatActivity {
                         realm.insert(mEvent);
                     }
                 });
-
+                RealmResults<Event> e = mRealm.where(Event.class).findAll();
                 // go back to main page
                 startActivity(new Intent(NewEventActivity.this, MainActivity.class));
             }
@@ -164,16 +166,26 @@ public class NewEventActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                DatePickerDialog datePickerDialog = new DatePickerDialog(NewEventActivity.this,
-                        new DatePickerDialog.OnDateSetListener() {
 
-                            @Override
-                            public void onDateSet(DatePicker view, int year,
-                                                  int monthOfYear, int dayOfMonth) {
-                                saveAndPrintDate(year, monthOfYear, dayOfMonth, isStart);
-                            }
-                        }, mStartYear, mStartMonth, mStartDay);
+                final DatePickerDialog datePickerDialog = new DatePickerDialog(NewEventActivity.this,null, mStartYear, mStartMonth, mStartDay);
+//                datePickerDialog.setOnDateSetListener(new DatePickerDialog.OnDateSetListener() {
+//
+//                    @Override
+//                    public void onDateSet(DatePicker view, int year,
+//                                          int monthOfYear, int dayOfMonth) {
+//
+//                    }
+//                });
+                //date picker is closed when date is selected
+                datePickerDialog.getDatePicker().setOnDateChangedListener(new DatePicker.OnDateChangedListener() {
+                    @Override
+                    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        saveAndPrintDate(year, monthOfYear, dayOfMonth, isStart);
+                        datePickerDialog.dismiss();;
+                    }
+                });
                 datePickerDialog.show();
+
             }
         };
     }

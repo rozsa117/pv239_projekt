@@ -1,37 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#BF0C0C"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#FFFF"
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/listViewEvents"
+    <include layout="@layout/toolbar"
+        android:id="@+id/toolbar_today"/>
+
+    <android.support.design.widget.TabLayout
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:id="@+id/tabs"
+        android:background="@color/colorPrimary"
+        android:elevation="4dp"
+        android:minHeight="?attr/actionBarSize"
+        app:tabMode="fixed"
+        app:tabGravity="fill"
+        app:tabTextColor="#FFF"
+        app:tabSelectedTextColor="@color/colorAccent"
+        android:layout_below="@id/toolbar_today"/>
+
+    <android.support.v4.view.ViewPager
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/pager"
         android:layout_above="@id/bottomPanel"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="5dp"
-        android:background="#FFFF">
+        android:layout_below="@id/tabs"
+        />
 
-
-        <ListView
-            android:id="@+id/event_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:divider="#BF0C0C"
-            android:dividerHeight="2dp">
-        </ListView>
-
-    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/colorPrimary"
+        android:orientation="vertical"
+        android:showDividers="middle"
+        android:layout_above="@id/bottomPanel"
+        />
 
     <LinearLayout
         android:id="@+id/bottomPanel"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="80dp"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="0dp"
         android:background="#FFFF"
@@ -45,6 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
+            android:stateListAnimator="@null"
             android:background="#FFFF"
             android:drawableTop="@drawable/ic_add_task_24dp"
             android:gravity="center"
@@ -58,6 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
+            android:stateListAnimator="@null"
             android:background="#FFFF"
             android:drawableTop="@drawable/ic_calendar"
             android:gravity="center"
@@ -70,6 +83,7 @@
             android:layout_width="71dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:stateListAnimator="@null"
             android:layout_weight="1"
             android:background="#FFFF"
             android:drawableTop="@drawable/ic_history_24dp"

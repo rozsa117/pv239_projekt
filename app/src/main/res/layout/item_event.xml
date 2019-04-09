@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="70dp"
     android:background="#FFFF"
+    android:orientation="horizontal"
     >
 
     <RelativeLayout
@@ -43,30 +44,19 @@
             android:layout_below="@id/eventTime"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
-    </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="2.5">
-
-        <Switch
-            android:id="@+id/isFinished"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical|start" />
-
         <ImageButton
             android:id="@+id/editNotes"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center|center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_horizontal"
             android:background="#FFFF"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:layout_alignParentRight="true"
             android:src="@drawable/ic_insert_notes_24dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
-
-
-    </LinearLayout>
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:layout_marginEnd="20dp"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
 
 </LinearLayout>

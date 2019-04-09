@@ -39,7 +39,7 @@ public class EventAdapter extends ArrayAdapter<Event> {
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View listItem = convertView;
         if(listItem == null)
-            listItem = LayoutInflater.from(mContext).inflate(R.layout.event_list_view, parent,false);
+            listItem = LayoutInflater.from(mContext).inflate(R.layout.item_event, parent,false);
 
         Event currentEvent= eventList.get(position);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm");
@@ -55,9 +55,6 @@ public class EventAdapter extends ArrayAdapter<Event> {
 /*
         TextView mPosition = (TextView) listItem.findViewById(R.id.position);
         mPosition.setText(currentEvent.getmPosition());*/
-
-        Switch isFinished = (Switch) listItem.findViewById(R.id.isFinished);
-        isFinished.setChecked(currentEvent.ismFinished());
 
         ImageButton editNotes = (ImageButton) listItem.findViewById(R.id.editNotes);
         editNotes.setOnClickListener(new View.OnClickListener() {

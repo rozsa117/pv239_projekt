@@ -13,4 +13,7 @@
     <string name="new_event_select_start_date">Start date</string>
     <string name="new_event_select_end_time">End time</string>
     <string name="new_event_select_end_date">End date</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
