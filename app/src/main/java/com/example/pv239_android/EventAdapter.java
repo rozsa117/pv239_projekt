@@ -42,17 +42,17 @@ public class EventAdapter extends ArrayAdapter<Event> {
             listItem = LayoutInflater.from(mContext).inflate(R.layout.item_event, parent,false);
 
         Event currentEvent= eventList.get(position);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         TextView name = (TextView) listItem.findViewById(R.id.eventName);
         name.setText(currentEvent.getmName());
 
         TextView time = (TextView) listItem.findViewById(R.id.eventTime);
-        //TODO uncomment as soon as save plan is implemented
         time.setText(LocalDateTime.ofInstant(
                 currentEvent.getmStartTime().toInstant(), ZoneId.systemDefault()).format(formatter) +
                 " - " + LocalDateTime.ofInstant(
                 currentEvent.getmEndTime().toInstant(), ZoneId.systemDefault()).format(formatter));
 /*
+        //TODO uncomment as soon as save plan is implemented
         TextView mPosition = (TextView) listItem.findViewById(R.id.position);
         mPosition.setText(currentEvent.getmPosition());*/
 
@@ -67,10 +67,16 @@ public class EventAdapter extends ArrayAdapter<Event> {
         listItem.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Intent i = new Intent(mContext , Details.class);
+                return false;
+            }
+        });
+
+        listItem.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(mContext , NewEventActivity.class);
                 i.putExtra("event_id", eventList.get(position).getmId());
                 mContext.startActivity(i);
-                return false;
             }
         });
 
