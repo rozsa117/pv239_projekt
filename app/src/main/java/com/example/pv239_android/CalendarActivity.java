@@ -2,6 +2,7 @@ package com.example.pv239_android;
 
 import android.content.Intent;
 import android.content.ReceiverCallNotAllowedException;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -18,7 +19,6 @@ public class CalendarActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate: Started");
 
         CalendarView mCalendarView = (CalendarView) findViewById(R.id.calendar);
-
         mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
