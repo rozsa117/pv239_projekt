@@ -18,7 +18,6 @@ public class CalendarActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate: Started");
 
         CalendarView mCalendarView = (CalendarView) findViewById(R.id.calendar);
-
         mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {

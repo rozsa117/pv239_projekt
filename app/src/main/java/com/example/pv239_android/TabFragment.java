@@ -62,8 +62,14 @@ public class TabFragment extends Fragment {
         RealmResults<Event> events = mRealm.where(Event.class).findAll();
         eventList = new ArrayList<>();
         for(Event e : events) {
-            eventList.add(new EventItem(e.getmName(), e.getmPosition(), e.getmNotes(), e.getmStartTime() + ":" + e.getmEndTime()));
+            eventList.add(new EventItem(e.getmName(), e.getmPosition(), e.getmNotes(), toString(e.getmStartTime()) + " - " + toString(e.getmEndTime())));
         }
+
+    }
+
+    public String toString(Date date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM.dd hh:mm");
+        return dateFormat.format(date);
 
     }
 }

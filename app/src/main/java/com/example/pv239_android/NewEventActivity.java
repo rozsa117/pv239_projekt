@@ -152,7 +152,7 @@ public class NewEventActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Launch Time Picker Dialog
-                TimePickerDialog timePickerDialog = new TimePickerDialog(NewEventActivity.this,
+                TimePickerDialog timePickerDialog = new TimePickerDialog(NewEventActivity.this, R.style.CustomDialogTheme,
                         new TimePickerDialog.OnTimeSetListener() {
 
                             @Override
@@ -172,7 +172,7 @@ public class NewEventActivity extends AppCompatActivity {
             public void onClick(View v) {
 
 
-                final DatePickerDialog datePickerDialog = new DatePickerDialog(NewEventActivity.this,null, mStartYear, mStartMonth, mStartDay);
+                final DatePickerDialog datePickerDialog = new DatePickerDialog(NewEventActivity.this, R.style.CustomDialogTheme, null, mStartYear, mStartMonth, mStartDay);
 //                datePickerDialog.setOnDateSetListener(new DatePickerDialog.OnDateSetListener() {
 //
 //                    @Override

@@ -15,4 +15,14 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="CustomCalendarTheme" parent="Theme.AppCompat.Light">
+        <!-- Customize your theme here. -->
+        <item name="colorAccent">@color/colorPrimary</item>
+    </style>
+
+    <style name="CustomDialogTheme" parent="Base.Theme.AppCompat.Light.Dialog">
+        <!-- Customize your theme here. -->
+        <item name="colorAccent">@color/colorPrimary</item>
+    </style>
+
 </resources>
