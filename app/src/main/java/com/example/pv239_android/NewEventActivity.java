@@ -186,7 +186,7 @@ public class NewEventActivity extends AppCompatActivity {
                     @Override
                     public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         saveAndPrintDate(year, monthOfYear, dayOfMonth, isStart);
-                        datePickerDialog.dismiss();;
+                        datePickerDialog.dismiss();
                     }
                 });
                 datePickerDialog.show();
@@ -202,7 +202,7 @@ public class NewEventActivity extends AppCompatActivity {
     }
 
     private void saveAndPrintTime(int hour, int minute, boolean isStart) {
-        String formatted = String.format( "%02d", hour)+ ":" + String.format( "%02d", hour);
+        String formatted = String.format( "%02d", hour)+ ":" + String.format( "%02d", minute);
         if(isStart) {
             startTimeTextView.setText(formatted);
             mStartHour = hour;
