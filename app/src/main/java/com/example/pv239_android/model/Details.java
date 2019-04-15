@@ -47,8 +47,8 @@ public class Details extends AppCompatActivity {
 //            }
 //        });
 //
-//        startDateEditText.setText(thisEvent.getmStartTime().toString());
-//        endDateEditText.setText(thisEvent.getmEndTime().toString());
+//        startDateEditText.setText(thisEvent.getmStartTime().dateToString());
+//        endDateEditText.setText(thisEvent.getmEndTime().dateToString());
 
 
 
