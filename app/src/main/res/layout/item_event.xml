@@ -44,8 +44,8 @@
             android:layout_below="@id/eventTime"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
-        <ImageButton
-            android:id="@+id/editNotes"
+        <ImageView
+            android:id="@+id/isFinished"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right|center_horizontal"
@@ -53,7 +53,6 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="20dp"
             android:layout_alignParentRight="true"
-            android:src="@drawable/ic_insert_notes_24dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:layout_marginEnd="20dp"
             android:layout_alignParentEnd="true" />

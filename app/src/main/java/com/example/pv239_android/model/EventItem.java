@@ -8,12 +8,16 @@ public class EventItem {
     private String mPosition;
     private String mNotes;
     private String mTime;
+    private Boolean isFinished;
+    private Boolean canBeEdited;
 
-    public EventItem(String mName, String mPosition, String mNotes, String mTime) {
+    public EventItem(String mName, String mPosition, String mNotes, String mTime, Boolean isFinished, Boolean canBeEdited) {
         this.mName = mName;
         this.mPosition = mPosition;
         this.mNotes = mNotes;
         this.mTime = mTime;
+        this.isFinished = isFinished;
+        this.canBeEdited = canBeEdited;
     }
 
     public String getmName() {
@@ -46,5 +50,23 @@ public class EventItem {
 
     public void setmTime(String mTime) {
         this.mTime = mTime;
+    }
+
+
+    public Boolean getFinished() {
+        return isFinished;
+    }
+
+    public void setFinished(Boolean finished) {
+        isFinished = finished;
+    }
+
+
+    public Boolean getCanBeEdited() {
+        return canBeEdited;
+    }
+
+    public void setCanBeEdited(Boolean canBeEdited) {
+        this.canBeEdited = canBeEdited;
     }
 }
