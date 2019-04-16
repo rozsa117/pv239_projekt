@@ -52,10 +52,9 @@ public class EventAdapter extends ArrayAdapter<Event> {
                 " - " + LocalDateTime.ofInstant(
                 currentEvent.getmEndTime().toInstant(), ZoneId.systemDefault()).format(formatter));
 /*
-        //TODO uncomment as soon as save plan is implemented
         TextView mPosition = (TextView) listItem.findViewById(R.id.position);
-        mPosition.setText(currentEvent.getmPosition());*/
-
+        mPosition.setText(currentEvent.getmPosition());
+*/
         ImageButton editNotes = (ImageButton) listItem.findViewById(R.id.editNotes);
         editNotes.setOnClickListener(new View.OnClickListener() {
             @Override

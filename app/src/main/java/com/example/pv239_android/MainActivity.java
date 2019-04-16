@@ -107,18 +107,4 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-
-    // TODO converts string to date, maybe should be placed somewhere else
-    // possible palce is a static class in order to access form anywhere
-    public Date toDate(String dateString) {
-        Date date = null;
-        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        try {
-            date = formatter.parse(dateString);
-
-        } catch (ParseException e1) {
-            e1.printStackTrace();
-        }
-        return date;
-    }
 }

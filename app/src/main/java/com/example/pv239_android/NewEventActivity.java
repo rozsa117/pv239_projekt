@@ -14,8 +14,10 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.pv239_android.model.Event;
+import com.example.pv239_android.utils.Support;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -53,7 +55,6 @@ public class NewEventActivity extends AppCompatActivity {
         final Intent incomingIntent = getIntent();
         //passed by the CalendarActivity, format year-month-day
         int[] date = incomingIntent.getIntArrayExtra("date");
-        final int incoming_id = incomingIntent.getIntExtra("event_id", -1);
 
         final Calendar c = Calendar.getInstance();
         if (date != null) {
@@ -81,32 +82,32 @@ public class NewEventActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onCreate: Save plan");
-
-                mRealm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
-                        Event mEvent = new Event();
-                        if (incoming_id == -1) {
+                final Date startDate = Support.getDate(mStartYear, mStartMonth, mStartDay, mStartHour, mStartMinute);
+                final Date endDate = Support.getDate(mEndYear, mEndMonth, mEndDay, mEndHour, mEndMinute);
+                if (startDate.before(endDate)) {
+                    mRealm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+                            Event mEvent = new Event();
                             mEvent.setmId(getNextKey());
-                        }
-                        else {
-                         mEvent.setmId(incoming_id);
-                        }
-                        mEvent.setmName(((EditText) findViewById(R.id.newEventNameEdit)).getText().toString());
-                        mEvent.setmDescription(((EditText) findViewById(R.id.newEventDescriptionEdit)).getText().toString());
-                        //TODO convert date and time to Date
-                        mEvent.setmStartTime(getDate(mStartYear, mStartMonth, mStartDay, mStartHour, mStartMinute));
-                        //set time an hour later
-                        mEvent.setmEndTime(getDate(mEndYear, mEndMonth, mEndDay, mEndHour, mEndMinute));
-                        //TODO finish implementation
-                        //mEvent.setmPosition();
+                            mEvent.setmName(((EditText) findViewById(R.id.newEventNameEdit)).getText().toString());
+                            mEvent.setmDescription(((EditText) findViewById(R.id.newEventDescriptionEdit)).getText().toString());
+                            mEvent.setmStartTime(startDate);
+                            mEvent.setmEndTime(endDate);
+                            //TODO finish implementation
+                            //mEvent.setmPosition();
 
-                        realm.insertOrUpdate(mEvent);
-                    }
-                });
-                RealmResults<Event> e = mRealm.where(Event.class).findAll();
-                // go back to main page
-                startActivity(new Intent(NewEventActivity.this, MainActivity.class));
+                            realm.insertOrUpdate(mEvent);
+                        }
+                    });
+                    // go back to main page
+                    startActivity(new Intent(NewEventActivity.this, MainActivity.class));
+                }
+                else {
+                    Toast.makeText(NewEventActivity.this,
+                            NewEventActivity.this.getResources().getString(R.string.toast_start_before_end),
+                            Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
@@ -229,16 +230,5 @@ public class NewEventActivity extends AppCompatActivity {
             mEndMonth = month;
             mEndDay = day;
         }
-    }
-
-    private static Date getDate(int year, int month, int day, int hour, int minute) {
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, year);
-        cal.set(Calendar.MONTH, month);
-        cal.set(Calendar.DAY_OF_MONTH, day);
-        cal.set(Calendar.HOUR_OF_DAY, hour);
-        cal.set(Calendar.MINUTE, minute);
-        cal.set(Calendar.MILLISECOND, 0);
-        return cal.getTime();
     }
 }

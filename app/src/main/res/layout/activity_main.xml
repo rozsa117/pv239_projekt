@@ -56,11 +56,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:stateListAnimator="@null"
             android:background="#FFFF"
             android:drawableTop="@drawable/ic_add_task_24dp"
             android:gravity="center"
-            android:text="New task"
+            android:stateListAnimator="@null"
+            android:text="@string/create_new_event_button"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:textSize="10dp" />
 
@@ -70,11 +70,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:stateListAnimator="@null"
             android:background="#FFFF"
             android:drawableTop="@drawable/ic_calendar"
             android:gravity="center"
-            android:text="Calendar"
+            android:stateListAnimator="@null"
+            android:text="@string/calendar_button"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:textSize="10dp" />
 
@@ -83,12 +83,12 @@
             android:layout_width="71dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:stateListAnimator="@null"
             android:layout_weight="1"
             android:background="#FFFF"
             android:drawableTop="@drawable/ic_history_24dp"
             android:gravity="center"
-            android:text="History"
+            android:stateListAnimator="@null"
+            android:text="@string/history_button"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:textSize="10dp" />
 
