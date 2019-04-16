@@ -94,6 +94,7 @@ public class NewEventActivity extends AppCompatActivity {
                             mEvent.setmDescription(((EditText) findViewById(R.id.newEventDescriptionEdit)).getText().toString());
                             mEvent.setmStartTime(startDate);
                             mEvent.setmEndTime(endDate);
+                            mEvent.setmNotes(((EditText) findViewById(R.id.newEventNotes)).getText().toString());
                             //TODO finish implementation
                             //mEvent.setmPosition();
 

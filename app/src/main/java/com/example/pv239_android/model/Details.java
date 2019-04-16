@@ -42,6 +42,7 @@ public class Details extends AppCompatActivity {
 
         editName = (EditText) findViewById(R.id.details_edit_name);
         editDescription = (EditText) findViewById(R.id.details_edit_description);
+        editNotes = (EditText) findViewById(R.id.details_notes);
         //start time editText
         startDateEditText = (EditText) findViewById(R.id.details_edit_start_date);
         //start time editText
@@ -57,6 +58,7 @@ public class Details extends AppCompatActivity {
         Event event = mRealm.where(Event.class).equalTo("mId", incoming_id).findFirst();
         editName.setText(event.getmName());
         editDescription.setText(event.getmDescription());
+        editNotes.setText(event.getmNotes());
         Calendar startDate = Calendar.getInstance();
         startDate.setTime(event.getmStartTime());
         Calendar endDate = Calendar.getInstance();
@@ -80,6 +82,7 @@ public class Details extends AppCompatActivity {
                     event.setmDescription(editDescription.getText().toString());
                     event.setmStartTime(startDate);
                     event.setmEndTime(endDate);
+                    event.setmNotes(editNotes.getText().toString());
                     mRealm.insertOrUpdate(event);
                     mRealm.commitTransaction();
                     startActivity(new Intent(Details.this, MainActivity.class));
