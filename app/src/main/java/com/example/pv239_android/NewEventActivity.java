@@ -30,7 +30,7 @@ public class NewEventActivity extends AppCompatActivity {
     private static final String TAG = "NewEventActivity";
 
     Realm mRealm = Realm.getDefaultInstance();
-    private TextView startTimeTextView, startDateTextView, endDateTextView, endTimeTextView;
+    private EditText startTimeEditText, startDateEditText, endDateEditText, endTimeEditText;
     private int mStartYear, mStartMonth, mStartDay, mStartHour, mStartMinute;
     private int mEndYear, mEndMonth, mEndDay, mEndHour, mEndMinute;
 
@@ -42,12 +42,12 @@ public class NewEventActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate: Started");
 
         //start time and date text view
-        startTimeTextView = findViewById(R.id.newEventStartTimeTextView);
-        startDateTextView = findViewById(R.id.newEventStartDateTextView);
+        startTimeEditText = findViewById(R.id.new_event_edit_start_time);
+        startDateEditText = findViewById(R.id.new_event_edit_start_date);
 
         //end time and date text view
-        endDateTextView = findViewById(R.id.newEventEndDateTextView);
-        endTimeTextView = findViewById(R.id.newEventEndTimeTextView);
+        endDateEditText = findViewById(R.id.new_event_edit_end_date);
+        endTimeEditText = findViewById(R.id.new_event_edit_end_time);
 
         //setting listeners to each button and setting current date and time on a new event
         handleDateAndTimeSelection();
@@ -132,21 +132,17 @@ public class NewEventActivity extends AppCompatActivity {
 
     private void handleDateAndTimeSelection() {
 
-        //start time button
-        Button startDateButton = (Button) findViewById(R.id.newEventSelectStartDateButton);
-        startDateButton.setOnClickListener(makeListenerForDate(true));
+        //start date
+        startDateEditText.setOnClickListener(makeListenerForDate(true));
 
-        //start time button
-        Button startTimeButton = (Button) findViewById(R.id.newEventSelectStartTimeButton);
-        startTimeButton.setOnClickListener(makeListenerForTime(true));
+        //start time
+        startTimeEditText.setOnClickListener(makeListenerForTime(true));
 
-        // end date button
-        Button endDateButton = (Button) findViewById(R.id.newEventSelectEndDateButton);
-        endDateButton.setOnClickListener(makeListenerForDate(false));
+        // end date
+        endDateEditText.setOnClickListener(makeListenerForDate(false));
 
-        // end time button
-        Button endTimeButton = (Button) findViewById(R.id.newEventSelectEndTimeButton);
-        endTimeButton.setOnClickListener(makeListenerForTime(false));
+        // end time
+        endTimeEditText.setOnClickListener(makeListenerForTime(false));
     }
 
     private  View.OnClickListener makeListenerForTime(final boolean isStart) {
@@ -206,12 +202,12 @@ public class NewEventActivity extends AppCompatActivity {
     private void saveAndPrintTime(int hour, int minute, boolean isStart) {
         String formatted = String.format( "%02d", hour)+ ":" + String.format( "%02d", minute);
         if(isStart) {
-            startTimeTextView.setText(formatted);
+            startTimeEditText.setText(formatted);
             mStartHour = hour;
             mStartMinute = minute;
         }
         else {
-            endTimeTextView.setText(formatted);
+            endTimeEditText.setText(formatted);
             mEndHour = hour;
             mEndMinute = minute;
         }
@@ -220,13 +216,13 @@ public class NewEventActivity extends AppCompatActivity {
     private void saveAndPrintDate(int year, int month, int day, boolean isStart) {
         String formatted = String.format("%02d", day) + "-" + String.format("%02d", (month + 1)) + "-" + year;
         if (isStart) {
-            startDateTextView.setText(formatted);
+            startDateEditText.setText(formatted);
             mStartYear = year;
             mStartMonth = month;
             mStartDay = day;
         }
         else {
-            endDateTextView.setText(formatted);
+            endDateEditText.setText(formatted);
             mEndYear = year;
             mEndMonth = month;
             mEndDay = day;

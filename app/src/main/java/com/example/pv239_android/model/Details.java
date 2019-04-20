@@ -14,6 +14,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.pv239_android.MainActivity;
+import com.example.pv239_android.NewEventActivity;
 import com.example.pv239_android.R;
 import com.example.pv239_android.utils.Support;
 
@@ -67,7 +68,7 @@ public class Details extends AppCompatActivity {
         saveAndPrintDate(endDate.get(Calendar.YEAR), endDate.get(Calendar.MONTH), endDate.get(Calendar.DAY_OF_MONTH), false);
         saveAndPrintTime(startDate.get(Calendar.HOUR_OF_DAY), startDate.get(Calendar.MINUTE), true);
         saveAndPrintTime(endDate.get(Calendar.HOUR_OF_DAY), endDate.get(Calendar.MINUTE), false);
-
+        handleDateAndTimeSelection();
         // Save button
         Button updateButton = (Button) findViewById(R.id.btnUpdate);
         updateButton.setOnClickListener(new View.OnClickListener(){
@@ -142,7 +143,7 @@ public class Details extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Launch Time Picker Dialog
-                TimePickerDialog timePickerDialog = new TimePickerDialog(Details.this,
+                TimePickerDialog timePickerDialog = new TimePickerDialog(Details.this, R.style.CustomDialogTheme,
                         new TimePickerDialog.OnTimeSetListener() {
 
                             @Override
@@ -160,16 +161,24 @@ public class Details extends AppCompatActivity {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final DatePickerDialog datePickerDialog = new DatePickerDialog(Details.this, R.style.CustomDialogTheme, null, mStartYear, mStartMonth, mStartDay);
 
-                DatePickerDialog datePickerDialog = new DatePickerDialog(Details.this,
-                        new DatePickerDialog.OnDateSetListener() {
-
-                            @Override
-                            public void onDateSet(DatePicker view, int year,
-                                                  int monthOfYear, int dayOfMonth) {
-                                saveAndPrintDate(year, monthOfYear, dayOfMonth, isStart);
-                            }
-                        }, mStartYear, mStartMonth, mStartDay);
+                datePickerDialog.getDatePicker().setOnDateChangedListener(new DatePicker.OnDateChangedListener() {
+                    @Override
+                    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        saveAndPrintDate(year, monthOfYear, dayOfMonth, isStart);
+                        datePickerDialog.dismiss();
+                    }
+                });
+//                DatePickerDialog datePickerDialog = new DatePickerDialog(Details.this,
+//                        new DatePickerDialog.OnDateSetListener() {
+//
+//                            @Override
+//                            public void onDateSet(DatePicker view, int year,
+//                                                  int monthOfYear, int dayOfMonth) {
+//                                saveAndPrintDate(year, monthOfYear, dayOfMonth, isStart);
+//                            }
+//                        }, mStartYear, mStartMonth, mStartDay);
                 datePickerDialog.show();
             }
         };

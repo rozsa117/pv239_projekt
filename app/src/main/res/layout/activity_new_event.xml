@@ -89,7 +89,7 @@
         android:layout_marginTop="8dp"
         android:text="@string/event_end_time"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newEventSelectStartDateButton" />
+        app:layout_constraintTop_toBottomOf="@+id/new_event_edit_start_date" />
 
     <TextView
         android:id="@+id/newEventLocation"
@@ -100,7 +100,7 @@
         android:layout_marginTop="8dp"
         android:text="@string/event_location"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newEventSelectEndDateButton" />
+        app:layout_constraintTop_toBottomOf="@+id/new_event_edit_end_date" />
 
     <EditText
         android:id="@+id/newEventLocationEdit"
@@ -113,111 +113,6 @@
         android:inputType=""
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/newEventLocation" />
-
-    <TextView
-        android:id="@+id/newEventStartDateTextView"
-        android:layout_width="103dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/newEventEndTime"
-        app:layout_constraintEnd_toStartOf="@+id/newEventSelectStartDateButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newEventStartTime"
-        app:layout_constraintVertical_bias="0.384" />
-
-    <TextView
-        android:id="@+id/newEventEndDateTextView"
-        android:layout_width="103dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/newEventLocation"
-        app:layout_constraintEnd_toStartOf="@+id/newEventSelectEndDateButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newEventEndTime"
-        app:layout_constraintVertical_bias="0.375" />
-
-    <Button
-        android:id="@+id/newEventSelectStartDateButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="@string/new_event_select_start_date"
-        app:layout_constraintEnd_toStartOf="@+id/newEventStartTimeTextView"
-        app:layout_constraintTop_toBottomOf="@+id/newEventStartTime" />
-
-    <Button
-        android:id="@+id/newEventSelectEndDateButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
-        android:text="@string/new_event_select_end_date"
-        app:layout_constraintEnd_toStartOf="@+id/newEventEndTimeTextView"
-        app:layout_constraintTop_toBottomOf="@+id/newEventEndTime" />
-
-    <TextView
-        android:id="@+id/newEventStartTimeTextView"
-        android:layout_width="51dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/newEventSelectStartDateButton"
-        app:layout_constraintEnd_toStartOf="@+id/newEventSelectStartTimeButton"
-        app:layout_constraintTop_toBottomOf="@+id/newEventStartTime" />
-
-    <Button
-        android:id="@+id/newEventSelectStartTimeButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="@string/new_event_select_start_time"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newEventStartTime" />
-
-    <TextView
-        android:id="@+id/newEventEndTimeTextView"
-        android:layout_width="51dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="8dp"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/newEventLocation"
-        app:layout_constraintEnd_toStartOf="@+id/newEventSelectEndTimeButton"
-        app:layout_constraintTop_toBottomOf="@+id/newEventEndTime"
-        app:layout_constraintVertical_bias="0.375" />
-
-    <Button
-        android:id="@+id/newEventSelectEndTimeButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="@string/new_event_select_end_time"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newEventEndTime" />
 
     <TextView
         android:id="@+id/textView"
@@ -248,6 +143,68 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <EditText
+        android:id="@+id/new_event_edit_start_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="DD/MM/YYYY"
+        android:inputType="date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newEventStartTime"
+        android:focusable="false" />
+
+    <EditText
+        android:id="@+id/new_event_edit_end_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="DD/MM/YYYY"
+        android:inputType="date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newEventEndTime"
+        android:focusable="false" />
+
+    <EditText
+        android:id="@+id/new_event_edit_start_time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:ems="10"
+        android:hint="00:00"
+        android:inputType="time"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/new_event_edit_start_date"
+        app:layout_constraintTop_toBottomOf="@+id/newEventStartTime"
+        android:focusable="false"/>
+
+    <EditText
+        android:id="@+id/new_event_edit_end_time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:ems="10"
+        android:hint="00:00"
+        android:inputType="time"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/new_event_edit_end_date"
+        app:layout_constraintTop_toBottomOf="@+id/newEventEndTime"
+        android:focusable="false" />
 
 
 </android.support.constraint.ConstraintLayout>
