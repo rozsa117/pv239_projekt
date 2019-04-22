@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Napi tervező</string>
+    <string name="event_name">Név</string>
+    <string name="event_description">Leírás</string>
+    <string name="event_start_time">Kezdete</string>
+    <string name="event_end_time">Vége</string>
+    <string name="event_location">Helyszín</string>
+    <string name="plan_name">Név</string>
+    <string name="plan_description">Leírás</string>
+    <string name="plan_date">Dátum</string>
+    <string name="plan_save">Mentés</string>
+    <string name="update_event_button">Frissítés</string>
+    <string name="delete_event_button">Törlés</string>
+    <string name="event_notes">Jegyzetek</string>
+    <string name="create_new_event_button">Új terv</string>
+    <string name="calendar_button">Naptár</string>
+    <string name="history_button">Múlt</string>
+    <string name="details">Részletek</string>
+    <string name="history_of_events">Tervek a múltban</string>
+    <string name="today">Mai</string>
+    <string name="upcoming">Közelgő</string>
+
+    <string name="toast_start_before_end">A Kezdeti dátumnak korábban kell lennie mint a végzés ideje!</string>
+</resources>

@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Každodenný plánovač</string>
+    <string name="event_name">Názov</string>
+    <string name="event_description">Popis</string>
+    <string name="event_start_time">Začiatok</string>
+    <string name="event_end_time">Koniec</string>
+    <string name="event_location">Mieso</string>
+    <string name="plan_name">Názov</string>
+    <string name="plan_description">Popis</string>
+    <string name="plan_date">Dátum</string>
+    <string name="plan_save">Uložiť</string>
+    <string name="update_event_button">Aktualizovať</string>
+    <string name="delete_event_button">Zmazať</string>
+    <string name="event_notes">Poznámky</string>
+    <string name="create_new_event_button">Nový plán</string>
+    <string name="calendar_button">Kalendár</string>
+    <string name="history_button">Minulosť</string>
+    <string name="details">Podrobnosti</string>
+    <string name="history_of_events">Plány v minulosti</string>
+    <string name="today">Dnešné</string>
+    <string name="upcoming">Nadchádzajúce</string>
+
+    <string name="toast_start_before_end">Začiatok musí byť pre koncom!</string>
+</resources>

@@ -43,8 +43,8 @@ public class MainActivity extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.pager);
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
         //Add fragments
-        adapter.AddFragment(new TabFragment(), "Today");
-        adapter.AddFragment(new TabFragment(), "Upcoming");
+        adapter.AddFragment(new TabFragment(), MainActivity.this.getResources().getString(R.string.today));
+        adapter.AddFragment(new TabFragment(), MainActivity.this.getResources().getString(R.string.upcoming));
 
         viewPager.setAdapter(adapter);
 
