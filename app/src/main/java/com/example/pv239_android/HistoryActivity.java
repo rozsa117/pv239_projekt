@@ -40,7 +40,7 @@ public class HistoryActivity extends AppCompatActivity {
         RealmResults<Event> events = mRealm.where(Event.class).lessThan("mEndTime", atEndOfDay(new Date(new Date().getTime() - (24 * 60 * 60 * 1000)))).findAll();
         historyEventList = new ArrayList<>();
         for(Event e : events) {
-            historyEventList.add(new EventItem(e.getmName(), e.getmPosition(), e.getmNotes(), dateToString(e.getmStartTime()) + " - " + dateToString(e.getmEndTime()), e.ismFinished(), false));
+            historyEventList.add(new EventItem(e.getmName(), e.getmNotes(), dateToString(e.getmStartTime()) + " - " + dateToString(e.getmEndTime()), e.ismFinished(), false, e.getmLocation().getmAddress()));
         }
 
         //v = inflater.inflate(R.layout.fragment_tab, container, false);
@@ -54,7 +54,7 @@ public class HistoryActivity extends AppCompatActivity {
     }
 
     public String dateToString(Date date) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM.dd hh:mm");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM. hh:mm");
         return dateFormat.format(date);
 
     }

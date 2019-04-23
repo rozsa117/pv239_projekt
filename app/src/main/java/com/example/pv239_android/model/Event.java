@@ -11,19 +11,19 @@ public class Event extends RealmObject {
     private int mId;
     private String mName;
     private String mDescription;
-    private String mPosition;
     private String mNotes;
     private Date mStartTime;
     private Date mEndTime;
+    private Location mLocation;
     private boolean mFinished = false;
 
-    public Event(String mName, String mDescription, String mPosition, String mNotes, Date mStartTime, Date mEndTime, boolean mFinished) {
+    public Event(String mName, String mDescription, String mNotes, Date mStartTime, Date mEndTime, Location mLocation, boolean mFinished) {
         this.mName = mName;
         this.mDescription = mDescription;
-        this.mPosition = mPosition;
         this.mNotes = mNotes;
         this.mStartTime = mStartTime;
         this.mEndTime = mEndTime;
+        this.mLocation = mLocation;
         this.mFinished = mFinished;
     }
 
@@ -55,14 +55,6 @@ public class Event extends RealmObject {
         this.mDescription = mDescription;
     }
 
-    public String getmPosition() {
-        return mPosition;
-    }
-
-    public void setmPosition(String mPosition) {
-        this.mPosition = mPosition;
-    }
-
     public String getmNotes() {
         return mNotes;
     }
@@ -85,6 +77,14 @@ public class Event extends RealmObject {
 
     public void setmEndTime(Date mEndTime) {
         this.mEndTime = mEndTime;
+    }
+
+    public Location getmLocation() {
+        return mLocation;
+    }
+
+    public void setmLocation(Location mLocation) {
+        this.mLocation = mLocation;
     }
 
     public boolean ismFinished() {

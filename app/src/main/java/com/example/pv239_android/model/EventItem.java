@@ -5,19 +5,19 @@ import java.util.Date;
 public class EventItem {
 
     private String mName;
-    private String mPosition;
     private String mNotes;
     private String mTime;
     private Boolean isFinished;
     private Boolean canBeEdited;
+    private String mLocation;
 
-    public EventItem(String mName, String mPosition, String mNotes, String mTime, Boolean isFinished, Boolean canBeEdited) {
+    public EventItem(String mName, String mNotes, String mTime, Boolean isFinished, Boolean canBeEdited, String mLocation) {
         this.mName = mName;
-        this.mPosition = mPosition;
         this.mNotes = mNotes;
         this.mTime = mTime;
         this.isFinished = isFinished;
         this.canBeEdited = canBeEdited;
+        this.mLocation = mLocation;
     }
 
     public String getmName() {
@@ -26,14 +26,6 @@ public class EventItem {
 
     public void setmName(String mName) {
         this.mName = mName;
-    }
-
-    public String getmPosition() {
-        return mPosition;
-    }
-
-    public void setmPosition(String mPosition) {
-        this.mPosition = mPosition;
     }
 
     public String getmNotes() {
@@ -68,5 +60,13 @@ public class EventItem {
 
     public void setCanBeEdited(Boolean canBeEdited) {
         this.canBeEdited = canBeEdited;
+    }
+
+    public String getmLocation() {
+        return mLocation;
+    }
+
+    public void setmLocation(String mLocation) {
+        this.mLocation = mLocation;
     }
 }

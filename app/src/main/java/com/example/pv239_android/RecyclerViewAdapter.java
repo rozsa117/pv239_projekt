@@ -36,7 +36,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         myViewHolder.tv_Name.setText(mData.get(i).getmName());
         myViewHolder.tv_Time.setText(mData.get(i).getmTime() );
-        myViewHolder.tv_Location.setText(mData.get(i).getmPosition());
+        myViewHolder.tv_Location.setText(mData.get(i).getmLocation());
         myViewHolder.notes = mData.get(i).getmNotes();
         if(mData.get(i).getFinished()) {
             myViewHolder.isFinished.setImageResource(R.drawable.ic_finished);
