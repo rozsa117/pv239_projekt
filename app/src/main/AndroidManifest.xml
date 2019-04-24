@@ -25,20 +25,20 @@
         </activity>
         <activity
             android:name=".EditNotesActivity"
-            android:label="Notes"
+            android:label="@string/event_notes"
             android:parentActivityName=".MainActivity">
         </activity>
         <activity
             android:name=".NewEventActivity"
-            android:label="New event">
+            android:label="@string/create_new_event_button">
         </activity>
         <activity
             android:name=".CalendarActivity"
-            android:label="Calendar">
+            android:label="@string/calendar_button">
         </activity>
         <activity
             android:name=".HistoryActivity"
-            android:label="History of events">
+            android:label="@string/history_of_events">
         </activity>
         <service android:name=".AppTrackingService" android:process=":app_tracking_service" />
         <meta-data

@@ -9,19 +9,16 @@
     <string name="plan_description">Description</string>
     <string name="plan_date">Date</string>
     <string name="plan_save">Save</string>
-    <string name="new_event_select_start_time">Start time</string>
-    <string name="new_event_select_start_date">Start date</string>
-    <string name="new_event_select_end_time">End time</string>
-    <string name="new_event_select_end_date">End date</string>
     <string name="update_event_button">Update</string>
     <string name="delete_event_button">Delete</string>
     <string name="event_notes">Notes</string>
     <string name="create_new_event_button">New event</string>
     <string name="calendar_button">Calendar</string>
     <string name="history_button">History</string>
+    <string name="details">Details</string>
+    <string name="history_of_events">History of events</string>
+    <string name="today">Today</string>
+    <string name="upcoming">Upcoming</string>
 
     <string name="toast_start_before_end">Start date must be before end date!</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

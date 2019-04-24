@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -51,6 +52,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         editName = (EditText) findViewById(R.id.details_edit_name);
         editDescription = (EditText) findViewById(R.id.details_edit_description);
+        editNotes = (EditText) findViewById(R.id.details_notes);
         //start time editText
         startDateEditText = (EditText) findViewById(R.id.details_edit_start_date);
         //start time editText
@@ -76,6 +78,7 @@ public class DetailsActivity extends AppCompatActivity {
         editDescription.setText(event.getmDescription());
         actualLocation = event.getmLocation();
         editLocation.setText(event.getmLocation().getmAddress());
+        editNotes.setText(event.getmNotes());
         Calendar startDate = Calendar.getInstance();
         startDate.setTime(event.getmStartTime());
         Calendar endDate = Calendar.getInstance();
@@ -84,7 +87,7 @@ public class DetailsActivity extends AppCompatActivity {
         saveAndPrintDate(endDate.get(Calendar.YEAR), endDate.get(Calendar.MONTH), endDate.get(Calendar.DAY_OF_MONTH), false);
         saveAndPrintTime(startDate.get(Calendar.HOUR_OF_DAY), startDate.get(Calendar.MINUTE), true);
         saveAndPrintTime(endDate.get(Calendar.HOUR_OF_DAY), endDate.get(Calendar.MINUTE), false);
-
+        handleDateAndTimeSelection();
         // Save button
         Button updateButton = (Button) findViewById(R.id.btnUpdate);
         updateButton.setOnClickListener(new View.OnClickListener(){
@@ -100,6 +103,7 @@ public class DetailsActivity extends AppCompatActivity {
                     event.setmStartTime(startDate);
                     event.setmEndTime(endDate);
                     event.setmLocation(actualLocation);
+                    event.setmNotes(editNotes.getText().toString());
                     mRealm.insertOrUpdate(event);
                     mRealm.commitTransaction();
                     startActivity(new Intent(DetailsActivity.this, MainActivity.class));

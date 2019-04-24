@@ -14,13 +14,13 @@ public class EditNotesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_notes);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         editText = (EditText) findViewById(R.id.editNotes);
         editText.setText(getIntent().getStringExtra("notes"));
     }
 
-
+/*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
@@ -37,5 +37,5 @@ public class EditNotesActivity extends AppCompatActivity {
             // do something here
         }
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 }
