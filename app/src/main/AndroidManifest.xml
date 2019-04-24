@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".model.Details"
+            android:name=".DetailsActivity"
             android:label="Details">
         </activity>
         <activity
@@ -40,12 +40,13 @@
             android:name=".HistoryActivity"
             android:label="History of events">
         </activity>
+        <service android:name=".AppTrackingService" android:process=":app_tracking_service" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAkCaEXBLSiELz6uu2JFvviwVME1dSU4lk"/>
+            android:value="AIzaSyCne9dcXC9btoQ1Yq0OJ3V_GaCx2UD3f20"/>
     </application>
 
 </manifest>

@@ -43,7 +43,7 @@ public class NewEventActivity extends AppCompatActivity {
     private int mEndYear, mEndMonth, mEndDay, mEndHour, mEndMinute;
     private Location actualLocation = null;
 
-    private final static int PLACE_PICKER_REQUEST = 111;
+    private final static int PLACE_PICKER_REQUEST = 1;
     private final static int AUTOCOMPLETE_REQUEST_CODE = 1;
 
 
@@ -69,15 +69,6 @@ public class NewEventActivity extends AppCompatActivity {
                 openPlacePicker();
             }
         });
-
-        // Initialize Places with new version of dependency
-//        Places.initialize(getApplicationContext(), "AIzaSyAkCaEXBLSiELz6uu2JFvviwVME1dSU4lk");
-//        if (!Places.isInitialized()) {
-//            Places.initialize(getApplicationContext(), "AIzaSyAkCaEXBLSiELz6uu2JFvviwVME1dSU4lk");
-//        }
-//
-//        // Create a new Places client instance.
-//        PlacesClient placesClient = Places.createClient(this);
 
         locationView = findViewById(R.id.locationAutocomplete);
         locationView.setOnClickListener(new View.OnClickListener() {
@@ -294,8 +285,8 @@ public class NewEventActivity extends AppCompatActivity {
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Place place = PlaceAutocomplete.getPlace(this, data);
-                locationView.setText(place.getName() +  " , " + place.getAddress());
-                actualLocation = new Location(place.getId(), place.getName().toString(), place.getAddress().toString(), place.getLatLng().latitude, place.getLatLng().longitude);
+                locationView.setText(place.getAddress());
+                actualLocation = new Location(place.getId(), place.getName().toString(), (String) place.getAddress(), place.getLatLng().latitude, place.getLatLng().longitude);
                 Log.i(TAG, "Place I found: " + place.getName() + ", " + place.getId() + ", " + place.getAddress() + ", " + place.getLatLng());
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 // TODO: Handle the error.

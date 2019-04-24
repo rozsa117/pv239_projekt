@@ -1,4 +1,4 @@
-package com.example.pv239_android.model;
+package com.example.pv239_android;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -13,26 +13,35 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.example.pv239_android.MainActivity;
-import com.example.pv239_android.R;
+import com.example.pv239_android.model.Event;
+import com.example.pv239_android.model.Location;
 import com.example.pv239_android.utils.Support;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.Status;
+import com.google.android.libraries.places.compat.AutocompleteFilter;
+import com.google.android.libraries.places.compat.Place;
+import com.google.android.libraries.places.compat.ui.PlaceAutocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
 
 import java.util.Calendar;
 import java.util.Date;
 
 import io.realm.Realm;
 
-public class Details extends AppCompatActivity {
+public class DetailsActivity extends AppCompatActivity {
 
 //    Realm mRealm = Realm.getDefaultInstance();
 
-    private static final String TAG = "Details";
+    private static final String TAG = "DetailsActivity";
     Realm mRealm = Realm.getDefaultInstance();
     private EditText startDateEditText, startTimeEditText, endDateEditText, endTimeEditText;
     private EditText editName, editDescription, editLocation, editNotes;
     private int mStartYear, mStartMonth, mStartDay, mStartHour, mStartMinute;
     private int mEndYear, mEndMonth, mEndDay, mEndHour, mEndMinute;
     private Event thisEvent;
+    private final static int AUTOCOMPLETE_REQUEST_CODE = 1;
+    private Location actualLocation = null;
 
 
     @Override
@@ -50,6 +59,14 @@ public class Details extends AppCompatActivity {
         endDateEditText = (EditText) findViewById(R.id.details_edit_end_date);
         // end time editText
         endTimeEditText = (EditText) findViewById(R.id.details_edit_end_time);
+        // edit location
+        editLocation = (EditText) findViewById(R.id.details_edit_location);
+        editLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initAutocomplete();
+            }
+        });
 
         final Intent incomingIntent = getIntent();
         final int incoming_id = incomingIntent.getIntExtra("event_id", -1);
@@ -57,6 +74,8 @@ public class Details extends AppCompatActivity {
         Event event = mRealm.where(Event.class).equalTo("mId", incoming_id).findFirst();
         editName.setText(event.getmName());
         editDescription.setText(event.getmDescription());
+        actualLocation = event.getmLocation();
+        editLocation.setText(event.getmLocation().getmAddress());
         Calendar startDate = Calendar.getInstance();
         startDate.setTime(event.getmStartTime());
         Calendar endDate = Calendar.getInstance();
@@ -80,13 +99,14 @@ public class Details extends AppCompatActivity {
                     event.setmDescription(editDescription.getText().toString());
                     event.setmStartTime(startDate);
                     event.setmEndTime(endDate);
+                    event.setmLocation(actualLocation);
                     mRealm.insertOrUpdate(event);
                     mRealm.commitTransaction();
-                    startActivity(new Intent(Details.this, MainActivity.class));
+                    startActivity(new Intent(DetailsActivity.this, MainActivity.class));
                 }
                 else{
-                    Toast.makeText(Details.this,
-                            Details.this.getResources().getString(R.string.toast_start_before_end),
+                    Toast.makeText(DetailsActivity.this,
+                            DetailsActivity.this.getResources().getString(R.string.toast_start_before_end),
                             Toast.LENGTH_LONG).show();
                 }
             }
@@ -102,7 +122,7 @@ public class Details extends AppCompatActivity {
                         .equalTo("mId", incoming_id).findFirst();
                 event.deleteFromRealm();
                 mRealm.commitTransaction();
-                startActivity(new Intent(Details.this, MainActivity.class));
+                startActivity(new Intent(DetailsActivity.this, MainActivity.class));
             }
         });
 //        handleDateAndTimeSelection();
@@ -139,7 +159,7 @@ public class Details extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Launch Time Picker Dialog
-                TimePickerDialog timePickerDialog = new TimePickerDialog(Details.this,
+                TimePickerDialog timePickerDialog = new TimePickerDialog(DetailsActivity.this,
                         new TimePickerDialog.OnTimeSetListener() {
 
                             @Override
@@ -158,7 +178,7 @@ public class Details extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                DatePickerDialog datePickerDialog = new DatePickerDialog(Details.this,
+                DatePickerDialog datePickerDialog = new DatePickerDialog(DetailsActivity.this,
                         new DatePickerDialog.OnDateSetListener() {
 
                             @Override
@@ -199,6 +219,39 @@ public class Details extends AppCompatActivity {
             mEndYear = year;
             mEndMonth = month;
             mEndDay = day;
+        }
+    }
+
+    private void initAutocomplete() {
+        // Start the autocomplete intent.
+        Intent intent = null;
+        try {
+            intent = new PlaceAutocomplete.IntentBuilder(
+                    AutocompleteFilter.TYPE_FILTER_ADDRESS)
+                    .build(this);
+        } catch (GooglePlayServicesRepairableException e) {
+            e.printStackTrace();
+        } catch (GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
+        }
+        startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
+
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlaceAutocomplete.getPlace(this, data);
+                editLocation.setText(place.getAddress());
+                actualLocation = new Location(place.getId(), place.getName().toString(), (String) place.getAddress(), place.getLatLng().latitude, place.getLatLng().longitude);
+                Log.i(TAG, "Place I found: " + place.getName() + ", " + place.getId() + ", " + place.getAddress() + ", " + place.getLatLng());
+            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                // TODO: Handle the error.
+                Status status = PlaceAutocomplete.getStatus(this,data);
+                Log.i(TAG, status.getStatusMessage());
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
         }
     }
 }

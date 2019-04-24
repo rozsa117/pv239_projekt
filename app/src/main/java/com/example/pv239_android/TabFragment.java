@@ -67,8 +67,8 @@ public class TabFragment extends Fragment {
         }
         eventList = new ArrayList<>();
         for(Event e : events) {
-            eventList.add(new EventItem(e.getmName(), e.getmNotes(), dateToString(e.getmStartTime()) + " - " + dateToString(e.getmEndTime()),
-                    e.ismFinished(), true, e.getmLocation().getmAddress().toString()) );
+            eventList.add(new EventItem(e.getmId(), e.getmName(), e.getmNotes(), dateToString(e.getmStartTime()) + " - " + dateToString(e.getmEndTime()),
+                    e.ismFinished(), true, e.getmLocation().getmAddress()) );
         }
 
     }
