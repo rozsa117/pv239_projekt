@@ -3,7 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/event_list_view"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
+    android:layout_height="wrap_content"
     android:background="#FFFF"
     android:orientation="horizontal"
     >
@@ -36,11 +36,13 @@
 
         <TextView
             android:id="@+id/position"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="clip_vertical"
-            android:gravity="center_horizontal"
+            android:gravity="start"
+            android:layout_marginRight="50dp"
             android:text="position"
+            android:textAlignment="textStart"
             android:layout_below="@id/eventTime"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 

@@ -1,7 +1,11 @@
 package com.example.pv239_android;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.location.LocationManager;
 import android.os.Build;
+import android.os.IBinder;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -14,6 +18,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import com.example.pv239_android.model.Event;
+import com.google.android.gms.location.LocationListener;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -30,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
     private TabLayout tabLayout;
+    private AppTrackingService mService;
+
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -52,13 +61,17 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         //init Realm
-        Realm.init(getApplicationContext());
+        Realm.init(this);
         RealmConfiguration config =
                 new RealmConfiguration.Builder()
                         .deleteRealmIfMigrationNeeded()
                         .build();
         Realm.setDefaultConfiguration(config);
         Realm mRealm = Realm.getDefaultInstance();
+
+        //start tracking service
+        Intent intent = new Intent(this, AppTrackingService.class);
+        startService(intent);
 
         //***********************************************************//
         //TODO DELETE THIS PART AS SOON AS YOU WANT DATA IN APLICATION

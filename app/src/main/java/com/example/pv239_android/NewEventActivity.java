@@ -17,22 +17,36 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.pv239_android.model.Event;
+import com.example.pv239_android.model.Location;
 import com.example.pv239_android.utils.Support;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.Status;
+import com.google.android.libraries.places.compat.AutocompleteFilter;
+import com.google.android.libraries.places.compat.Place;
+import com.google.android.libraries.places.compat.ui.PlaceAutocomplete;
+import com.google.android.libraries.places.compat.ui.PlacePicker;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
 
 import java.util.Calendar;
 import java.util.Date;
 
 import io.realm.Realm;
-import io.realm.RealmResults;
 
 public class NewEventActivity extends AppCompatActivity {
 
     private static final String TAG = "NewEventActivity";
 
     Realm mRealm = Realm.getDefaultInstance();
+    private TextView locationView;
     private EditText startTimeEditText, startDateEditText, endDateEditText, endTimeEditText;
     private int mStartYear, mStartMonth, mStartDay, mStartHour, mStartMinute;
     private int mEndYear, mEndMonth, mEndDay, mEndHour, mEndMinute;
+    private Location actualLocation = null;
+
+    private final static int PLACE_PICKER_REQUEST = 1;
+    private final static int AUTOCOMPLETE_REQUEST_CODE = 1;
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
@@ -48,6 +62,22 @@ public class NewEventActivity extends AppCompatActivity {
         //end time and date text view
         endDateEditText = findViewById(R.id.new_event_edit_end_date);
         endTimeEditText = findViewById(R.id.new_event_edit_end_time);
+
+        Button btnMap = (Button) findViewById(R.id.btnMap);
+        btnMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openPlacePicker();
+            }
+        });
+
+        locationView = findViewById(R.id.locationAutocomplete);
+        locationView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initAutocomplete();
+            }
+        });
 
         //setting listeners to each button and setting current date and time on a new event
         handleDateAndTimeSelection();
@@ -84,7 +114,7 @@ public class NewEventActivity extends AppCompatActivity {
                 Log.d(TAG, "onCreate: Save plan");
                 final Date startDate = Support.getDate(mStartYear, mStartMonth, mStartDay, mStartHour, mStartMinute);
                 final Date endDate = Support.getDate(mEndYear, mEndMonth, mEndDay, mEndHour, mEndMinute);
-                if (startDate.before(endDate)) {
+                if (startDate.before(endDate) && actualLocation != null) {
                     mRealm.executeTransaction(new Realm.Transaction() {
                         @Override
                         public void execute(Realm realm) {
@@ -94,9 +124,9 @@ public class NewEventActivity extends AppCompatActivity {
                             mEvent.setmDescription(((EditText) findViewById(R.id.newEventDescriptionEdit)).getText().toString());
                             mEvent.setmStartTime(startDate);
                             mEvent.setmEndTime(endDate);
+                            mEvent.setmLocation(actualLocation);
                             mEvent.setmNotes(((EditText) findViewById(R.id.newEventNotes)).getText().toString());
                             //TODO finish implementation
-                            //mEvent.setmPosition();
 
                             realm.insertOrUpdate(mEvent);
                         }
@@ -228,4 +258,56 @@ public class NewEventActivity extends AppCompatActivity {
             mEndDay = day;
         }
     }
+
+    private void initAutocomplete() {
+        EditText btnAutocomplete = (EditText) findViewById(R.id.locationAutocomplete);
+        // Set the fields to specify which types of place data to return.
+        //List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG);
+
+        // Start the autocomplete intent.
+        Intent intent = null;
+        try {
+            intent = new PlaceAutocomplete.IntentBuilder(
+                    AutocompleteFilter.TYPE_FILTER_ADDRESS)
+                    .build(this);
+        } catch (GooglePlayServicesRepairableException e) {
+            e.printStackTrace();
+        } catch (GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
+        }
+        startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
+
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlaceAutocomplete.getPlace(this, data);
+                locationView.setText(place.getAddress());
+                actualLocation = new Location(place.getId(), place.getName().toString(), (String) place.getAddress(), place.getLatLng().latitude, place.getLatLng().longitude);
+                Log.i(TAG, "Place I found: " + place.getName() + ", " + place.getId() + ", " + place.getAddress() + ", " + place.getLatLng());
+            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                // TODO: Handle the error.
+                Status status = PlaceAutocomplete.getStatus(this,data);
+                Log.i(TAG, status.getStatusMessage());
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
+        }
+    }
+
+    private void openPlacePicker() {
+        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+        try {
+            // for activty
+            startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
+            // for fragment
+            //startActivityForResult(builder.build(getActivity()), PLACE_PICKER_REQUEST);
+        } catch (GooglePlayServicesRepairableException e) {
+            e.printStackTrace();
+        } catch (GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

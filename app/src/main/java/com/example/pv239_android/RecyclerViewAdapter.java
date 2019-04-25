@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.example.pv239_android.model.Details;
+
 import com.example.pv239_android.model.EventItem;
 import java.util.List;
 
@@ -36,8 +36,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         myViewHolder.tv_Name.setText(mData.get(i).getmName());
         myViewHolder.tv_Time.setText(mData.get(i).getmTime() );
-        myViewHolder.tv_Location.setText(mData.get(i).getmPosition());
+        myViewHolder.tv_Location.setText(mData.get(i).getmLocation());
         myViewHolder.notes = mData.get(i).getmNotes();
+        myViewHolder.eventId = mData.get(i).getmEventId();
         if(mData.get(i).getFinished()) {
             myViewHolder.isFinished.setImageResource(R.drawable.ic_finished);
         } else {
@@ -72,7 +73,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 itemView.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
-                        Intent i = new Intent(itemView.getContext(), Details.class);
+                        Intent i = new Intent(itemView.getContext(), DetailsActivity.class);
                         i.putExtra("event_id", eventId);
                         itemView.getContext().startActivity(i);
                         return true;
