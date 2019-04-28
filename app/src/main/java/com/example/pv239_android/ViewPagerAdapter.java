@@ -13,6 +13,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     private final List<Fragment> fragmentList = new ArrayList<>();
     private final List<String> fragmentTitles = new ArrayList<>();
+    private static final String TAG = "ViewPagerAdapter";
 
 
     public ViewPagerAdapter(FragmentManager fm) {
@@ -21,7 +22,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        TabFragment tabFragment = new TabFragment();
+        TabFragment tabFragment = (TabFragment) fragmentList.get(position);
         position = position + 1;
         Bundle bundle = new Bundle();
         bundle.putString("message", "Fragment: " + position);
@@ -40,8 +41,14 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         return fragmentTitles.get(position);
     }
 
-    public void AddFragment(Fragment newFragment, String title) {
+    public void addFragment(TabFragment newFragment, String title) {
+        newFragment.setTitle(title);
         fragmentList.add(newFragment);
         fragmentTitles.add(title);
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        ((TabFragment) fragmentList.get(0)).dataChanged();
     }
 }

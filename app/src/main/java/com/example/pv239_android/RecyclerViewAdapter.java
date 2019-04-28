@@ -15,8 +15,8 @@ import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
 
-    Context mContext;
-    List<EventItem> mData;
+    private Context mContext;
+    private List<EventItem> mData;
 
     public RecyclerViewAdapter(Context mContext, List<EventItem> mData) {
         this.mContext = mContext;
@@ -28,8 +28,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v;
         v = LayoutInflater.from(mContext).inflate(R.layout.item_event, viewGroup, false);
-        MyViewHolder vHolder = new MyViewHolder(v, mData.get(i).getCanBeEdited());
-        return vHolder;
+        return new MyViewHolder(v, mData.get(i).getCanBeEdited());
     }
 
     @Override
@@ -90,9 +89,5 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 }
             });
         }
-
-
     }
-
-
 }

@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,8 @@ public class TabFragment extends Fragment {
     private RecyclerView recyclerView;
     private List<EventItem> eventList;
     private View v;
+    private Realm mRealm;
+    private String title;
     public TabFragment() {
         // Required empty public constructor
     }
@@ -54,22 +57,7 @@ public class TabFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Realm mRealm = Realm.getDefaultInstance();
-
-        Date today = new Date();
-        RealmResults<Event> events = mRealm.where(Event.class).findAll();
-        if(this.getArguments().get("message").equals("Fragment: 1")) {
-            events = mRealm.where(Event.class)
-                    .between("mEndTime", atStartOfDay(today), atEndOfDay(today)).or()
-                    .between("mStartTime", atStartOfDay(today), atEndOfDay(today)).findAll();
-        } else {
-            events = mRealm.where(Event.class).greaterThan("mStartTime", atStartOfDay(new Date(new Date().getTime() + (24 * 60 * 60 * 1000)))).findAll();
-        }
-        eventList = new ArrayList<>();
-        for(Event e : events) {
-            eventList.add(new EventItem(e.getmId(), e.getmName(), e.getmNotes(), dateToString(e.getmStartTime()) + " - " + dateToString(e.getmEndTime()),
-                    e.ismFinished(), true, e.getmLocation().getmAddress()) );
-        }
+        loadData();
 
     }
 
@@ -97,5 +85,36 @@ public class TabFragment extends Fragment {
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
         return calendar.getTime();
+    }
+
+    public void dataChanged() {
+        Log.d(TAG, "Data changed during runtime");
+        loadData();
+    }
+
+    private void loadData() {
+        Date today = new Date();
+        mRealm = Realm.getDefaultInstance();
+        RealmResults<Event> events = mRealm.where(Event.class).findAll();
+        if(title.equals("Today")) {
+            events = mRealm.where(Event.class)
+                    .between("mEndTime", atStartOfDay(today), atEndOfDay(today)).or()
+                    .between("mStartTime", atStartOfDay(today), atEndOfDay(today)).findAll();
+        } else {
+            events = mRealm.where(Event.class).greaterThan("mStartTime", atStartOfDay(new Date(new Date().getTime() + (24 * 60 * 60 * 1000)))).findAll();
+        }
+        eventList = new ArrayList<>();
+        for(Event e : events) {
+            eventList.add(new EventItem(e.getmId(), e.getmName(), e.getmNotes(), dateToString(e.getmStartTime()) + " - " + dateToString(e.getmEndTime()),
+                    e.ismFinished(), true, e.getmLocation().getmAddress()) );
+        }
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

@@ -1,11 +1,16 @@
 package com.example.pv239_android;
 
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.location.LocationManager;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -36,8 +41,9 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private ViewPagerAdapter adapter;
     private TabLayout tabLayout;
-    private AppTrackingService mService;
-
+    private Messenger mService;
+    private Messenger messenger;
+    private boolean bound;
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -52,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.pager);
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
         //Add fragments
-        adapter.AddFragment(new TabFragment(), MainActivity.this.getResources().getString(R.string.today));
-        adapter.AddFragment(new TabFragment(), MainActivity.this.getResources().getString(R.string.upcoming));
+        adapter.addFragment(new TabFragment(), MainActivity.this.getResources().getString(R.string.today));
+        adapter.addFragment(new TabFragment(), MainActivity.this.getResources().getString(R.string.upcoming));
 
         viewPager.setAdapter(adapter);
 
@@ -70,8 +76,25 @@ public class MainActivity extends AppCompatActivity {
         Realm mRealm = Realm.getDefaultInstance();
 
         //start tracking service
+        class IncomingHandler extends Handler {
+            @Override
+            public void handleMessage(Message msg) {
+                switch (msg.what) {
+                    case AppTrackingService.MSG_LOCATION_CHANGED:
+                        Log.d(TAG, "message changed dominik");
+                        adapter.notifyDataSetChanged();
+                        viewPager.setAdapter(adapter);
+                        break;
+                    default:
+                        super.handleMessage(msg);
+                }
+            }
+        }
+        messenger = new Messenger(new IncomingHandler());
         Intent intent = new Intent(this, AppTrackingService.class);
         startService(intent);
+        bindService(intent, trackingServiceConnection, Context.BIND_AUTO_CREATE);
+
 
         //***********************************************************//
         //TODO DELETE THIS PART AS SOON AS YOU WANT DATA IN APLICATION
@@ -118,6 +141,30 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, HistoryActivity.class));
             }
         });
-
     }
+
+    private ServiceConnection trackingServiceConnection = new ServiceConnection() {
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            mService = new Messenger(service);
+            try {
+                Message msg = Message.obtain(null, AppTrackingService.MSG_REGISTER_CLIENT);
+                msg.replyTo = messenger;
+                mService.send(msg);
+                bound = true;
+
+            } catch (RemoteException e) {
+                // Here, the service has crashed even before we were able to connect
+            }
+        }
+
+        public void onServiceDisconnected(ComponentName className) {
+            // This is called when the connection with the service has been
+            // unexpectedly disconnected -- that is, its process crashed.
+            mService = null;
+            bound = false;
+        }
+
+    };
+
+
 }
