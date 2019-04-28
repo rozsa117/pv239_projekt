@@ -21,4 +21,5 @@
     <string name="upcoming">Nadchádzajúce</string>
 
     <string name="toast_start_before_end">Začiatok musí byť pre koncom!</string>
+    <string name="toast_empty_location">Miesto nemôže byť prázdne!</string>
 </resources>

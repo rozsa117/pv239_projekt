@@ -21,4 +21,5 @@
     <string name="upcoming">Upcoming</string>
 
     <string name="toast_start_before_end">Start date must be before end date!</string>
+    <string name="toast_empty_location">Location cannot be empty!</string>
 </resources>
