@@ -210,7 +210,6 @@
         android:focusable="false"
         android:hint="London, UK"
         android:inputType="text"
-        android:text="London, UK"
         app:layout_constraintTop_toBottomOf="@+id/newEventLocation"
         tools:layout_editor_absoluteX="5dp" />
     <Button

@@ -21,24 +21,29 @@
         </activity>
         <activity
             android:name=".DetailsActivity"
-            android:label="Details">
+            android:label="Details"
+            android:parentActivityName=".MainActivity">
         </activity>
         <activity
             android:name=".EditNotesActivity"
             android:label="@string/event_notes"
+            android:noHistory="true"
             android:parentActivityName=".MainActivity">
         </activity>
         <activity
             android:name=".NewEventActivity"
-            android:label="@string/create_new_event_button">
+            android:label="@string/create_new_event_button"
+            android:parentActivityName=".MainActivity">
         </activity>
         <activity
             android:name=".CalendarActivity"
-            android:label="@string/calendar_button">
+            android:label="@string/calendar_button"
+            android:parentActivityName=".MainActivity">
         </activity>
         <activity
             android:name=".HistoryActivity"
-            android:label="@string/history_of_events">
+            android:label="@string/history_of_events"
+            android:parentActivityName=".MainActivity">
         </activity>
         <service android:name=".AppTrackingService" android:process=":app_tracking_service" />
         <meta-data

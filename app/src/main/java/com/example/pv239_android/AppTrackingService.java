@@ -1,28 +1,21 @@
 package com.example.pv239_android;
 
-import android.Manifest;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Binder;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
-import android.text.format.DateUtils;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.util.Log;
-import android.widget.EditText;
-
 import com.example.pv239_android.model.Event;
-
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.util.Calendar;
-import java.util.Date;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -37,6 +30,15 @@ public class AppTrackingService extends Service {
     private static final float LOCATION_DISTANCE = 0.5f;
     private RealmResults<Event> events;
     private Realm mRealm;
+    private Messenger mainActivity;
+    private Messenger messenger;
+
+    /**
+     * Command to the service to display a message
+     */
+    static final int MSG_REGISTER_CLIENT = 1;
+    static final int MSG_LOCATION_CHANGED = 2;
+
 
     private class LocationListener implements android.location.LocationListener {
         Location mLastLocation;
@@ -52,8 +54,6 @@ public class AppTrackingService extends Service {
             Log.e(TAG, "onLocationChanged: " + location);
             mLastLocation.set(location);
             checkLocationOfEvents(location);
-
-
         }
 
         @Override
@@ -78,11 +78,6 @@ public class AppTrackingService extends Service {
     };
 
     @Override
-    public IBinder onBind(Intent arg) {
-        return null;
-    }
-
-    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.e(TAG, "onStartCommand");
         super.onStartCommand(intent, flags, startId);
@@ -92,6 +87,8 @@ public class AppTrackingService extends Service {
     @Override
     public void onCreate() {
         Log.e(TAG, "onCreate");
+        messenger = new Messenger(new IncomingHandler(this));
+
 
         Criteria criteria = new Criteria();
         criteria.setHorizontalAccuracy(Criteria.ACCURACY_HIGH);
@@ -150,25 +147,66 @@ public class AppTrackingService extends Service {
 
 
     private void checkLocationOfEvents(Location location) {
-        Log.d(TAG, "CHECK LOCATION OF EVENTS");
         Calendar c = Calendar.getInstance();
         c.add(Calendar.HOUR, 2);
+        boolean hasChanged = false;
         events = mRealm.where(Event.class)
                 .greaterThan("mEndTime", c.getTime()).and()
                 .lessThan("mStartTime", c.getTime()).findAll();
         mRealm.beginTransaction();
         for (Event e : events) {
+            Log.d(TAG, e.getmLocation().toString());
             Location eventLocation = new Location("provider");
             eventLocation.setLatitude(e.getmLocation().getmLat());
             eventLocation.setLongitude(e.getmLocation().getmLng());
-
-            if(location.distanceTo(eventLocation) < 10) {
+            Log.d(TAG, "Location Brno: " + location.distanceTo(eventLocation));
+            if(location.distanceTo(eventLocation) < 100) {
                 e.setmFinished(true);
+                hasChanged = true;
+
             }
         }
         mRealm.commitTransaction();
-
-
+        if(hasChanged) {
+            try {
+                if(mainActivity != null) {
+                    mainActivity.send(Message.obtain(null, MSG_LOCATION_CHANGED));
+                }
+            } catch (RemoteException ex) {
+                // If we get here, the client is dead, and we should remove it from the list
+                Log.d(TAG, "Removing client main activity");
+                mainActivity = null;
+            }
+        }
     }
 
+    class IncomingHandler extends Handler {
+        private Context applicationContext;
+
+        IncomingHandler(Context context) {
+            applicationContext = context.getApplicationContext();
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MSG_REGISTER_CLIENT:
+                    Log.d(TAG, "Adding client: " + msg.replyTo);
+                    mainActivity = msg.replyTo;
+                    break;
+                default:
+                    super.handleMessage(msg);
+                    break;
+            }
+        }
+    }
+    /**
+     * When binding to the service, we return an interface to our messenger
+     * for sending messages to the service.
+     */
+    @Override
+    public IBinder onBind(Intent intent) {
+        messenger = new Messenger(new IncomingHandler(this));
+        return messenger.getBinder();
+    }
 }
