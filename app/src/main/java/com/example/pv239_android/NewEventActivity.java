@@ -135,9 +135,16 @@ public class NewEventActivity extends AppCompatActivity {
                     startActivity(new Intent(NewEventActivity.this, MainActivity.class));
                 }
                 else {
-                    Toast.makeText(NewEventActivity.this,
-                            NewEventActivity.this.getResources().getString(R.string.toast_start_before_end),
-                            Toast.LENGTH_LONG).show();
+                    if (actualLocation != null) {
+                        Toast.makeText(NewEventActivity.this,
+                                NewEventActivity.this.getResources().getString(R.string.toast_empty_location),
+                                Toast.LENGTH_LONG).show();
+
+                    } else {
+                        Toast.makeText(NewEventActivity.this,
+                                NewEventActivity.this.getResources().getString(R.string.toast_start_before_end),
+                                Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         });

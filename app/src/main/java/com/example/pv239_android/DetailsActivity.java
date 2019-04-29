@@ -95,7 +95,7 @@ public class DetailsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Date startDate = Support.getDate(mStartYear, mStartMonth, mStartDay, mStartHour, mStartMinute);
                 Date endDate = Support.getDate(mEndYear, mEndMonth, mEndDay, mEndHour, mEndMinute);
-                if (startDate.before(endDate)) {
+                if (startDate.before(endDate) && actualLocation != null) {
                     mRealm.beginTransaction();
                     Event event = mRealm.where(Event.class).equalTo("mId", incoming_id).findFirst();
                     event.setmName(editName.getText().toString());
@@ -109,9 +109,16 @@ public class DetailsActivity extends AppCompatActivity {
                     startActivity(new Intent(DetailsActivity.this, MainActivity.class));
                 }
                 else{
-                    Toast.makeText(DetailsActivity.this,
-                            DetailsActivity.this.getResources().getString(R.string.toast_start_before_end),
-                            Toast.LENGTH_LONG).show();
+                    if (actualLocation != null) {
+                        Toast.makeText(DetailsActivity.this,
+                                DetailsActivity.this.getResources().getString(R.string.toast_empty_location),
+                                Toast.LENGTH_LONG).show();
+
+                    } else {
+                        Toast.makeText(DetailsActivity.this,
+                                DetailsActivity.this.getResources().getString(R.string.toast_start_before_end),
+                                Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         });
