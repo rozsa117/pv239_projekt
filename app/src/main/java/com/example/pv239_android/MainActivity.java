@@ -11,6 +11,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -60,12 +61,6 @@ public class MainActivity extends AppCompatActivity {
         //Add fragments
         adapter.addFragment(new TabFragment(), MainActivity.this.getResources().getString(R.string.today));
         adapter.addFragment(new TabFragment(), MainActivity.this.getResources().getString(R.string.upcoming));
-
-        viewPager.setAdapter(adapter);
-
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
-
         //init Realm
         Realm.init(this);
         RealmConfiguration config =
@@ -74,6 +69,12 @@ public class MainActivity extends AppCompatActivity {
                         .build();
         Realm.setDefaultConfiguration(config);
         Realm mRealm = Realm.getDefaultInstance();
+
+        viewPager.setAdapter(adapter);
+
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+
 
         //start tracking service
         class IncomingHandler extends Handler {
@@ -91,9 +92,11 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         messenger = new Messenger(new IncomingHandler());
-        Intent intent = new Intent(this, AppTrackingService.class);
-        startService(intent);
-        bindService(intent, trackingServiceConnection, Context.BIND_AUTO_CREATE);
+        if(!bound) {
+            Intent intent = new Intent(this, AppTrackingService.class);
+            startService(intent);
+            bindService(intent, trackingServiceConnection, Context.BIND_AUTO_CREATE);
+        }
 
 
         //***********************************************************//
@@ -166,5 +169,18 @@ public class MainActivity extends AppCompatActivity {
 
     };
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (trackingServiceConnection != null) {
+            unbindService(trackingServiceConnection);
+        }
+    }
 }

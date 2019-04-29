@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity"
+            android:noHistory="true"
             android:theme="@style/SecondAppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,6 +27,7 @@
         <activity
             android:name=".EditNotesActivity"
             android:label="@string/event_notes"
+            android:noHistory="true"
             android:parentActivityName=".MainActivity">
         </activity>
         <activity

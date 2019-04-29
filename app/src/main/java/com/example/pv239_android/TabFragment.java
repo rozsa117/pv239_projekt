@@ -44,6 +44,8 @@ public class TabFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        Realm.init(getActivity());
+        mRealm = Realm.getDefaultInstance();
         v = inflater.inflate(R.layout.fragment_tab, container, false);
         recyclerView = (RecyclerView) v.findViewById(R.id.event_recycler_view);
         RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(getContext(), eventList);
