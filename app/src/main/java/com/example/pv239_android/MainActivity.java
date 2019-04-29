@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
             public void handleMessage(Message msg) {
                 switch (msg.what) {
                     case AppTrackingService.MSG_LOCATION_CHANGED:
-                        Log.d(TAG, "message changed dominik");
+                        Log.d(TAG, "DATA HAS CHANGED");
                         adapter.notifyDataSetChanged();
                         viewPager.setAdapter(adapter);
                         break;
@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        this.finishAffinity();
         this.finish();
     }
 

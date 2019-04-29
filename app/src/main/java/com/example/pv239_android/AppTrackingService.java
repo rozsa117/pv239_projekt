@@ -149,6 +149,7 @@ public class AppTrackingService extends Service {
     private void checkLocationOfEvents(Location location) {
         Calendar c = Calendar.getInstance();
         c.add(Calendar.HOUR, 2);
+        boolean hasChanged = false;
         events = mRealm.where(Event.class)
                 .greaterThan("mEndTime", c.getTime()).and()
                 .lessThan("mStartTime", c.getTime()).findAll();
@@ -158,20 +159,25 @@ public class AppTrackingService extends Service {
             Location eventLocation = new Location("provider");
             eventLocation.setLatitude(e.getmLocation().getmLat());
             eventLocation.setLongitude(e.getmLocation().getmLng());
-            if(location.distanceTo(eventLocation) < 10) {
+            Log.d(TAG, "Location Brno: " + location.distanceTo(eventLocation));
+            if(location.distanceTo(eventLocation) < 100) {
                 e.setmFinished(true);
-                try {
-                    if(mainActivity != null) {
-                        mainActivity.send(Message.obtain(null, MSG_LOCATION_CHANGED));
-                    }
-                } catch (RemoteException ex) {
-                    // If we get here, the client is dead, and we should remove it from the list
-                    Log.d(TAG, "Removing client main activity");
-                    mainActivity = null;
-                }
+                hasChanged = true;
+
             }
         }
         mRealm.commitTransaction();
+        if(hasChanged) {
+            try {
+                if(mainActivity != null) {
+                    mainActivity.send(Message.obtain(null, MSG_LOCATION_CHANGED));
+                }
+            } catch (RemoteException ex) {
+                // If we get here, the client is dead, and we should remove it from the list
+                Log.d(TAG, "Removing client main activity");
+                mainActivity = null;
+            }
+        }
     }
 
     class IncomingHandler extends Handler {
