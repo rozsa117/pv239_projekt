@@ -22,6 +22,8 @@ import com.example.pv239_android.utils.Support;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.GeoDataClient;
+import com.google.android.gms.location.places.Places;
 import com.google.android.libraries.places.compat.AutocompleteFilter;
 import com.google.android.libraries.places.compat.Place;
 import com.google.android.libraries.places.compat.ui.PlaceAutocomplete;
@@ -135,7 +137,7 @@ public class NewEventActivity extends AppCompatActivity {
                     startActivity(new Intent(NewEventActivity.this, MainActivity.class));
                 }
                 else {
-                    if (actualLocation != null) {
+                    if (actualLocation == null) {
                         Toast.makeText(NewEventActivity.this,
                                 NewEventActivity.this.getResources().getString(R.string.toast_empty_location),
                                 Toast.LENGTH_LONG).show();
@@ -208,20 +210,13 @@ public class NewEventActivity extends AppCompatActivity {
 
 
                 final DatePickerDialog datePickerDialog = new DatePickerDialog(NewEventActivity.this, R.style.CustomDialogTheme, null, mStartYear, mStartMonth, mStartDay);
-//                datePickerDialog.setOnDateSetListener(new DatePickerDialog.OnDateSetListener() {
-//
-//                    @Override
-//                    public void onDateSet(DatePicker view, int year,
-//                                          int monthOfYear, int dayOfMonth) {
-//
-//                    }
-//                });
-                //date picker is closed when date is selected
-                datePickerDialog.getDatePicker().setOnDateChangedListener(new DatePicker.OnDateChangedListener() {
+                datePickerDialog.setOnDateSetListener(new DatePickerDialog.OnDateSetListener() {
+
                     @Override
-                    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                    public void onDateSet(DatePicker view, int year,
+                                          int monthOfYear, int dayOfMonth) {
                         saveAndPrintDate(year, monthOfYear, dayOfMonth, isStart);
-                        datePickerDialog.dismiss();
+
                     }
                 });
                 datePickerDialog.show();

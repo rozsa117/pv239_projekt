@@ -19,7 +19,7 @@
     <string name="history_of_events">History of events</string>
     <string name="today">Today</string>
     <string name="upcoming">Upcoming</string>
-
+    <string name="press_button_new_event">Create new event pressing button "New event"</string>
     <string name="toast_start_before_end">Start date must be before end date!</string>
     <string name="toast_empty_location">Location cannot be empty!</string>
 </resources>

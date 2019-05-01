@@ -35,7 +35,7 @@ public class DetailsActivity extends AppCompatActivity {
 //    Realm mRealm = Realm.getDefaultInstance();
 
     private static final String TAG = "DetailsActivity";
-    Realm mRealm = Realm.getDefaultInstance();
+    private Realm mRealm;
     private EditText startDateEditText, startTimeEditText, endDateEditText, endTimeEditText;
     private EditText editName, editDescription, editLocation, editNotes;
     private int mStartYear, mStartMonth, mStartDay, mStartHour, mStartMinute;
@@ -43,7 +43,7 @@ public class DetailsActivity extends AppCompatActivity {
     private Event thisEvent;
     private final static int AUTOCOMPLETE_REQUEST_CODE = 1;
     private Location actualLocation = null;
-
+    private Location newLocation = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,16 +73,20 @@ public class DetailsActivity extends AppCompatActivity {
         final Intent incomingIntent = getIntent();
         final int incoming_id = incomingIntent.getIntExtra("event_id", -1);
 
-        Event event = mRealm.where(Event.class).equalTo("mId", incoming_id).findFirst();
-        editName.setText(event.getmName());
-        editDescription.setText(event.getmDescription());
-        actualLocation = event.getmLocation();
-        editLocation.setText(event.getmLocation().getmAddress());
-        editNotes.setText(event.getmNotes());
+        Realm.init(this);
+        mRealm = Realm.getDefaultInstance();
+
+
+        thisEvent = mRealm.where(Event.class).equalTo("mId", incoming_id).findFirst();
+        editName.setText(thisEvent.getmName());
+        editDescription.setText(thisEvent.getmDescription());
+        actualLocation = thisEvent.getmLocation();
+        editLocation.setText(thisEvent.getmLocation().getmAddress());
+        editNotes.setText(thisEvent.getmNotes());
         Calendar startDate = Calendar.getInstance();
-        startDate.setTime(event.getmStartTime());
+        startDate.setTime(thisEvent.getmStartTime());
         Calendar endDate = Calendar.getInstance();
-        endDate.setTime(event.getmEndTime());
+        endDate.setTime(thisEvent.getmEndTime());
         saveAndPrintDate(startDate.get(Calendar.YEAR), startDate.get(Calendar.MONTH), startDate.get(Calendar.DAY_OF_MONTH), true);
         saveAndPrintDate(endDate.get(Calendar.YEAR), endDate.get(Calendar.MONTH), endDate.get(Calendar.DAY_OF_MONTH), false);
         saveAndPrintTime(startDate.get(Calendar.HOUR_OF_DAY), startDate.get(Calendar.MINUTE), true);
@@ -97,14 +101,20 @@ public class DetailsActivity extends AppCompatActivity {
                 Date endDate = Support.getDate(mEndYear, mEndMonth, mEndDay, mEndHour, mEndMinute);
                 if (startDate.before(endDate) && actualLocation != null) {
                     mRealm.beginTransaction();
-                    Event event = mRealm.where(Event.class).equalTo("mId", incoming_id).findFirst();
-                    event.setmName(editName.getText().toString());
-                    event.setmDescription(editDescription.getText().toString());
-                    event.setmStartTime(startDate);
-                    event.setmEndTime(endDate);
-                    event.setmLocation(actualLocation);
-                    event.setmNotes(editNotes.getText().toString());
-                    mRealm.insertOrUpdate(event);
+                    thisEvent.setmName(editName.getText().toString());
+                    thisEvent.setmDescription(editDescription.getText().toString());
+                    thisEvent.setmStartTime(startDate);
+                    thisEvent.setmEndTime(endDate);
+                    if(newLocation != null) {
+                        actualLocation.setmAddress(newLocation.getmAddress());
+                        actualLocation.setmLat(newLocation.getmLat());
+                        actualLocation.setmLng(newLocation.getmLng());
+                        actualLocation.setmName(newLocation.getmName());
+                    }
+
+                    thisEvent.setmLocation(actualLocation);
+                    thisEvent.setmNotes(editNotes.getText().toString());
+                    mRealm.insertOrUpdate(thisEvent);
                     mRealm.commitTransaction();
                     startActivity(new Intent(DetailsActivity.this, MainActivity.class));
                 }
@@ -136,20 +146,6 @@ public class DetailsActivity extends AppCompatActivity {
                 startActivity(new Intent(DetailsActivity.this, MainActivity.class));
             }
         });
-//        handleDateAndTimeSelection();
-//        final Intent incomingIntent = getIntent();
-//        final int eventId = incomingIntent.getIntExtra("event_id", 0);
-//        Log.d(TAG, "Domino " + eventId);
-//
-//        mRealm.executeTransaction(new Realm.Transaction() {
-//            @Override
-//            public void execute(Realm realm) {
-//                thisEvent = realm.where(Event.class).equalTo("mId", eventId).findFirst();
-//            }
-//        });
-//
-//        startDateEditText.setText(thisEvent.getmStartTime().dateToString());
-//        endDateEditText.setText(thisEvent.getmEndTime().dateToString());
 
 
 
@@ -170,7 +166,7 @@ public class DetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Launch Time Picker Dialog
-                TimePickerDialog timePickerDialog = new TimePickerDialog(DetailsActivity.this,
+                TimePickerDialog timePickerDialog = new TimePickerDialog(DetailsActivity.this, R.style.CustomDialogTheme,
                         new TimePickerDialog.OnTimeSetListener() {
 
                             @Override
@@ -189,15 +185,14 @@ public class DetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                DatePickerDialog datePickerDialog = new DatePickerDialog(DetailsActivity.this,
-                        new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(DetailsActivity.this, R.style.CustomDialogTheme, null, mStartYear, mStartMonth, mStartDay);
+                datePickerDialog.setOnDateSetListener(new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        saveAndPrintDate(year, month, dayOfMonth, isStart);
 
-                            @Override
-                            public void onDateSet(DatePicker view, int year,
-                                                  int monthOfYear, int dayOfMonth) {
-                                saveAndPrintDate(year, monthOfYear, dayOfMonth, isStart);
-                            }
-                        }, mStartYear, mStartMonth, mStartDay);
+                    }
+                });
                 datePickerDialog.show();
             }
         };
@@ -254,7 +249,7 @@ public class DetailsActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 Place place = PlaceAutocomplete.getPlace(this, data);
                 editLocation.setText(place.getAddress());
-                actualLocation = new Location(place.getId(), place.getName().toString(), (String) place.getAddress(), place.getLatLng().latitude, place.getLatLng().longitude);
+                newLocation = new Location(place.getId(), place.getName().toString(), (String) place.getAddress(), place.getLatLng().latitude, place.getLatLng().longitude);
                 Log.i(TAG, "Place I found: " + place.getName() + ", " + place.getId() + ", " + place.getAddress() + ", " + place.getLatLng());
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 // TODO: Handle the error.

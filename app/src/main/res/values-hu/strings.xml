@@ -19,6 +19,7 @@
     <string name="history_of_events">Tervek a múltban</string>
     <string name="today">Mai</string>
     <string name="upcoming">Közelgő</string>
+    <string name="press_button_new_event">Create new event pressing button "New event"</string>
 
     <string name="toast_start_before_end">A Kezdeti dátumnak korábban kell lennie mint a végzés ideje!</string>
     <string name="toast_empty_location">A helyszínt ki kell tölteni!</string>
