@@ -1,5 +1,7 @@
 package com.example.pv239_android;
 
+import android.Manifest;
+import android.app.Application;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +16,7 @@ import android.os.RemoteException;
 import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -22,15 +25,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ListView;
 import com.example.pv239_android.model.Event;
-import com.google.android.gms.location.LocationListener;
-
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -55,6 +50,9 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate: Started");
         toolbarToady = findViewById(R.id.toolbar_today);
         setSupportActionBar(toolbarToady);
+
+        ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+
 
         viewPager = (ViewPager) findViewById(R.id.pager);
         adapter = new ViewPagerAdapter(getSupportFragmentManager());

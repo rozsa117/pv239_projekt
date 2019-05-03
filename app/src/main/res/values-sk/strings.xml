@@ -19,6 +19,7 @@
     <string name="history_of_events">Plány v minulosti</string>
     <string name="today">Dnešné</string>
     <string name="upcoming">Nadchádzajúce</string>
+    <string name="press_button_new_event">Vytvorte novú udalosť stlačením tlačidla "Nová udalosť"</string>
 
     <string name="toast_start_before_end">Začiatok musí byť pre koncom!</string>
     <string name="toast_empty_location">Miesto nemôže byť prázdne!</string>

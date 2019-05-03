@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
 import com.example.pv239_android.model.Event;
 import com.example.pv239_android.model.EventItem;
 import java.text.SimpleDateFormat;
@@ -48,11 +50,15 @@ public class TabFragment extends Fragment {
         mRealm = Realm.getDefaultInstance();
         v = inflater.inflate(R.layout.fragment_tab, container, false);
         recyclerView = (RecyclerView) v.findViewById(R.id.event_recycler_view);
-        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(getContext(), eventList);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(recyclerViewAdapter);
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
-                DividerItemDecoration.VERTICAL));
+        if(!eventList.isEmpty()) {
+            TextView textView = (TextView) v.findViewById(R.id.text_create_new_event);
+            textView.setVisibility(View.INVISIBLE);
+            RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(getContext(), eventList);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+            recyclerView.setAdapter(recyclerViewAdapter);
+            recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),
+                    DividerItemDecoration.VERTICAL));
+        }
         return v;
     }
 
@@ -96,6 +102,7 @@ public class TabFragment extends Fragment {
 
     private void loadData() {
         Date today = new Date();
+        Realm.init(getActivity());
         mRealm = Realm.getDefaultInstance();
         RealmResults<Event> events = mRealm.where(Event.class).findAll();
         if(title.equals("Today")) {

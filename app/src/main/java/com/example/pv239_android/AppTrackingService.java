@@ -1,5 +1,6 @@
 package com.example.pv239_android;
 
+import android.Manifest;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import com.example.pv239_android.model.Event;
 import java.util.Calendar;
@@ -153,6 +155,7 @@ public class AppTrackingService extends Service {
         events = mRealm.where(Event.class)
                 .greaterThan("mEndTime", c.getTime()).and()
                 .lessThan("mStartTime", c.getTime()).findAll();
+        Log.d(TAG, "LOCATIONS BRNO :" + events.toString());
         mRealm.beginTransaction();
         for (Event e : events) {
             Log.d(TAG, e.getmLocation().toString());
